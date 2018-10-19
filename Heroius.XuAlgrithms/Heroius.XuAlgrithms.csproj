@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>heroius_asm.pfx</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Heroius</Authors>
+    <Company>Villo-EnvSafe</Company>
+    <Description>Migration XuShiliang Common Algrithms V4 into C# code.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/heroius/XuAlgrithms</PackageProjectUrl>
+    <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageIconUrl>http://envsafe.cn/store/images/ico_xushiliang_256.png</PackageIconUrl>
+  </PropertyGroup>
+
+</Project>

@@ -9,8 +9,6 @@ namespace Heroius.XuAlgrithms.Utility
     /// </summary>
     public static class Mapping
     {
-        const string ns = "Heroius.XuAlgrithms";
-
         /// <summary>
         /// 在所有定义的算法中查询功能包含关键字的算法类名
         /// </summary>
@@ -50,7 +48,21 @@ namespace Heroius.XuAlgrithms.Utility
         }
 
         internal static readonly Dictionary<string, string> ChsNames = new Dictionary<string, string>() {
-            { "TRMUL", "实矩阵相乘" }
+            //矩阵运算
+            { "TRMUL", "实矩阵相乘" },
+            { "TCMUL", "复矩阵相乘" },
+            { "RINV", "一般实矩阵求逆" },
+            { "CINV", "一般复矩阵求逆" },
+            { "SSGJ", "对称正定矩阵求逆" },
+            { "TRCH", "托伯利兹矩阵求逆的特兰持方法" },
+            { "SDET", "求一般行列式的值" },
+            { "RANK", "求矩阵的秩" },
+            { "CHOL", "对称正定矩阵的乔里斯基分解与行列式求值" },
+            { "LLUU", "矩阵的三角分解" },
+            { "MAQR", "一般实矩阵的QR分解" },
+            { "MUAV", "一般实矩阵的奇异值分解" },
+            { "GINV", "求广义逆的奇异值分解法" }
+            //
         };
     }
 }

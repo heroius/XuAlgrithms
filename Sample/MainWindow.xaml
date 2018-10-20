@@ -4,20 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sample"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
+        mc:Ignorable="d" Background="Gray"
+        Title="Heroius.XuAlgrithms Samples" Height="350" Width="525">
+    <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ItemsControl ItemsSource="{Binding Path=Samples}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button Content="{Binding Path=Name}" ToolTip="{Binding Path=Tooltip}" Click="Button_Click"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        <TextBlock x:Name="TbResult" Grid.Column="1"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5" Padding="5" Background="White">
+            <ItemsControl ItemsSource="{Binding Path=Samples}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding Path=Name}" ToolTip="{Binding Path=Tooltip}" Click="Button_Click"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock x:Name="TbResult" Grid.Column="1" Margin="5" Padding="5" Background="White"/>
     </Grid>
 </Window>

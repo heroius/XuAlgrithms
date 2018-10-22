@@ -36,8 +36,25 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EnvSafe.Expression, Version=4.1.9.0, Culture=neutral, PublicKeyToken=81d39e6de0021d31, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnvSafe.Expression.4.1.9\lib\portable-net403+sl5+win8\EnvSafe.Expression.dll</HintPath>
+    </Reference>
+    <Reference Include="Heroius.Extension, Version=1.0.17.0, Culture=neutral, PublicKeyToken=3c246bd6a563727a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Heroius.Extension.1.0.17\lib\portable-net40+sl5+wp8+win8\Heroius.Extension.dll</HintPath>
+    </Reference>
+    <Reference Include="Heroius.Extension.Desktop, Version=2.1.1.1, Culture=neutral, PublicKeyToken=3c246bd6a563727a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Heroius.Extension.Desktop.2.1.1.1\lib\net40\Heroius.Extension.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Heroius.Extension.Net, Version=2.0.1.1, Culture=neutral, PublicKeyToken=3c246bd6a563727a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Heroius.Extension.Net.2.0.1.1\lib\net40\Heroius.Extension.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Heroius.Extension.WPF, Version=2.1.1.0, Culture=neutral, PublicKeyToken=3c246bd6a563727a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Heroius.Extension.WPF.2.1.1\lib\net403\Heroius.Extension.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -56,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="SampleItem.cs" />
+    <Compile Include="Samples\SSTQ.cs" />
     <Compile Include="Samples\矩阵运算\CHOL.cs" />
     <Compile Include="Samples\矩阵运算\CINV.cs" />
     <Compile Include="Samples\矩阵运算\GINV.cs" />
@@ -102,6 +120,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Heroius</Authors>
     <Company>Villo-EnvSafe</Company>
-    <Description>Migration XuShiliang Common Algrithms V4 into C# code.</Description>
+    <Description>Migration XuShiliang Common Algrithms into C# code.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/heroius/XuAlgrithms</PackageProjectUrl>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>

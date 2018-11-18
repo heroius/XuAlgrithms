@@ -1,8 +1,8 @@
-﻿namespace Sample.Samples
+﻿namespace Sample.Matrix
 {
     public class TCMUL:SampleItem
     {
-        public TCMUL() : base("TCMUL") { }
+        public TCMUL() : base("Matrix.TCMUL") { }
 
         public override string Execute()
         {
@@ -30,7 +30,7 @@
                 { -3, 2, 1, -1 },
                 { -1, -2, 1, -2 }
             };
-            Heroius.XuAlgrithms.Algrithms.TCMUL(ar, ai, br, bi, out double[,] cr, out double[,] ci);
+            Heroius.XuAlgrithms.Matrix.TCMUL(ar, ai, br, bi, out double[,] cr, out double[,] ci);
             return $"real part:\r\n{Utility.MakeMatrixString(cr)}imaginary part:\r\n{Utility.MakeMatrixString(ci)}";
         }
     }

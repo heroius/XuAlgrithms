@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sample"
         mc:Ignorable="d" Background="Gray"
-        Title="Heroius.XuAlgrithms Samples" Height="350" Width="525">
+        Title="Heroius.XuAlgrithms Samples" Height="500" Width="800">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -15,7 +15,15 @@
             <ItemsControl ItemsSource="{Binding Path=Samples}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Path=Name}" ToolTip="{Binding Path=Tooltip}" Click="Button_Click"/>
+                        <Expander Header="{Binding Path=Section}">
+                            <ItemsControl ItemsSource="{Binding Path=Algrithms}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{Binding Path=Name}" ToolTip="{Binding Path=Tooltip}" Click="Button_Click"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Expander>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

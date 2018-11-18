@@ -1,8 +1,8 @@
-﻿namespace Sample.Samples
+﻿namespace Sample.Matrix
 {
     public class SSGJ:SampleItem
     {
-        public SSGJ() : base("SSGJ") { }
+        public SSGJ() : base("Matrix.SSGJ") { }
 
         public override string Execute()
         {
@@ -12,7 +12,7 @@
                 { 6,8,10,9 },
                 { 5,7,9,10 }
             };
-            Heroius.XuAlgrithms.Algrithms.SSGJ(a);
+            Heroius.XuAlgrithms.Matrix.SSGJ(a);
             return Utility.MakeMatrixString(a);
         }
     }

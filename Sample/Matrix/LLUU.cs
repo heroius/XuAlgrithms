@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class LLUU:SampleItem
     {
-        public LLUU() : base("LLUU") { }
+        public LLUU() : base("Matrix.LLUU") { }
 
         public override string Execute()
         {
@@ -18,7 +18,7 @@ namespace Sample.Samples
                 {2,4,-1,2 },
                 {4,2,1,1 }
             };
-            Heroius.XuAlgrithms.Algrithms.LLUU(a, out double[,] l, out double[,] u);
+            Heroius.XuAlgrithms.Matrix.LLUU(a, out double[,] l, out double[,] u);
             return $"lower triangle:\r\n{Utility.MakeMatrixString(l)}\r\nupper triangle:\r\n{Utility.MakeMatrixString(u)}";
         }
     }

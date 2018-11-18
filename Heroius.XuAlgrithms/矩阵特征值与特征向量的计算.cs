@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Heroius.XuAlgrithms
 {
-    public static partial class Algrithms
+    /// <summary>
+    /// 矩阵特征值与特征向量的计算
+    /// </summary>
+    public static partial class MatrixEigen
     {
         /// <summary>
         /// 用变形QR方法计算实对称三角矩阵的全部特征值与相应的向量

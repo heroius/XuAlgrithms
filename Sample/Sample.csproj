@@ -73,20 +73,20 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="SampleItem.cs" />
-    <Compile Include="Samples\SSTQ.cs" />
-    <Compile Include="Samples\矩阵运算\CHOL.cs" />
-    <Compile Include="Samples\矩阵运算\CINV.cs" />
-    <Compile Include="Samples\矩阵运算\GINV.cs" />
-    <Compile Include="Samples\矩阵运算\LLUU.cs" />
-    <Compile Include="Samples\矩阵运算\MAQR.cs" />
-    <Compile Include="Samples\矩阵运算\MUAV.cs" />
-    <Compile Include="Samples\矩阵运算\RANK.cs" />
-    <Compile Include="Samples\矩阵运算\RINV.cs" />
-    <Compile Include="Samples\矩阵运算\SDET.cs" />
-    <Compile Include="Samples\矩阵运算\SSGJ.cs" />
-    <Compile Include="Samples\矩阵运算\TCMUL.cs" />
-    <Compile Include="Samples\矩阵运算\TRCH.cs" />
-    <Compile Include="Samples\矩阵运算\TRMUL.cs" />
+    <Compile Include="MatrixEigen\SSTQ.cs" />
+    <Compile Include="Matrix\CHOL.cs" />
+    <Compile Include="Matrix\CINV.cs" />
+    <Compile Include="Matrix\GINV.cs" />
+    <Compile Include="Matrix\LLUU.cs" />
+    <Compile Include="Matrix\MAQR.cs" />
+    <Compile Include="Matrix\MUAV.cs" />
+    <Compile Include="Matrix\RANK.cs" />
+    <Compile Include="Matrix\RINV.cs" />
+    <Compile Include="Matrix\SDET.cs" />
+    <Compile Include="Matrix\SSGJ.cs" />
+    <Compile Include="Matrix\TCMUL.cs" />
+    <Compile Include="Matrix\TRCH.cs" />
+    <Compile Include="Matrix\TRMUL.cs" />
     <Compile Include="Utility.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

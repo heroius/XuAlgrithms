@@ -6,9 +6,9 @@ using System.Text;
 namespace Heroius.XuAlgrithms
 {
     /// <summary>
-    /// 算法函数
+    /// 矩阵运算
     /// </summary>
-    public static partial class Algrithms
+    public static partial class Matrix
     {
         /// <summary>
         /// 求m×n阶矩阵A与n×k阶矩阵B的乘积矩阵C=AB.

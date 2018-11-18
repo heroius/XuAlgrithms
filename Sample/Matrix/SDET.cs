@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class SDET:SampleItem
     {
-        public SDET() : base("SDET") { }
+        public SDET() : base("Matrix.SDET") { }
 
         public override string Execute()
         {
@@ -24,8 +24,8 @@ namespace Sample.Samples
                 {11,8,5,-7 },
                 {5,-1,-3,-1 }
             };
-            var deta = Heroius.XuAlgrithms.Algrithms.SDET(a);
-            var detb = Heroius.XuAlgrithms.Algrithms.SDET(b);
+            var deta = Heroius.XuAlgrithms.Matrix.SDET(a);
+            var detb = Heroius.XuAlgrithms.Matrix.SDET(b);
             return $"det(a)={deta}\r\ndet(b)={detb}";
         }
     }

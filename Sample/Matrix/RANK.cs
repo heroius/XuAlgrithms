@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class RANK:SampleItem
     {
-        public RANK() : base("RANK") { }
+        public RANK() : base("Matrix.RANK") { }
 
         public override string Execute()
         {
@@ -19,7 +19,7 @@ namespace Sample.Samples
                 {13,14,15,16 },
                 {17,18,19,20 }
             };
-            return Heroius.XuAlgrithms.Algrithms.RANK(a).ToString();
+            return Heroius.XuAlgrithms.Matrix.RANK(a).ToString();
         }
     }
 }

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class MUAV:SampleItem
     {
-        public MUAV() : base("MUAV") { }
+        public MUAV() : base("Matrix.MUAV") { }
 
         public override string Execute()
         {
@@ -24,8 +24,8 @@ namespace Sample.Samples
                 {1,-1,0,1 }
             };
             double eps = 0.000001;
-            Heroius.XuAlgrithms.Algrithms.MUAV(a, eps, out double[,] au, out double[,] av);
-            Heroius.XuAlgrithms.Algrithms.MUAV(b, eps, out double[,] bu, out double[,] bv);
+            Heroius.XuAlgrithms.Matrix.MUAV(a, eps, out double[,] au, out double[,] av);
+            Heroius.XuAlgrithms.Matrix.MUAV(b, eps, out double[,] bu, out double[,] bv);
             return $"matrix au:\r\n{Utility.MakeMatrixString(au)}\r\nmatrix av:\r\n{Utility.MakeMatrixString(av)}\r\nmatrix bu:\r\n{Utility.MakeMatrixString(bu)}\r\nmatrix bv:\r\n{Utility.MakeMatrixString(bv)}";
         }
     }

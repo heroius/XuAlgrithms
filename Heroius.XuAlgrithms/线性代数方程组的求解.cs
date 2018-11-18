@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Heroius.XuAlgrithms
 {
-    public static partial class Algrithms
+    /// <summary>
+    /// 线性方程组的求解
+    /// </summary>
+    public static partial class LinearEquations
     {
         /// <summary>
         /// 用全选主元高斯（Gauss）消去法求解n阶线性代数方程组AX=B.
@@ -845,7 +848,7 @@ namespace Heroius.XuAlgrithms
             }
             int i, j;
             double d;
-            var q = MAQR(a);                 //QR分解
+            var q = Matrix.MAQR(a);                 //QR分解
             var c = new double[n];
             for (i = 0; i <= n - 1; i++)
             {
@@ -883,7 +886,7 @@ namespace Heroius.XuAlgrithms
             int ka = Math.Max(m, n) + 1;
             int i, j;
             double[] x = new double[n];
-            GINV(a, eps, out aa, out u, out v);
+            Matrix.GINV(a, eps, out aa, out u, out v);
             for (i = 0; i <= n - 1; i++)
             {
                 x[i] = 0.0;

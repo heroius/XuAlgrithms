@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class CINV:SampleItem
     {
-        public CINV() : base("CINV") { }
+        public CINV() : base("Matrix.CINV") { }
 
         public override string Execute()
         {
@@ -24,7 +24,7 @@ namespace Sample.Samples
                 { -0.2836, -1.1967, 0.3558, -0.2078 },
                 { 0.3576, -1.2345, 2.1185, 0.4773 }
             };
-            Heroius.XuAlgrithms.Algrithms.CINV(ar, ai);
+            Heroius.XuAlgrithms.Matrix.CINV(ar, ai);
             return $"real part:\r\n{Utility.MakeMatrixString(ar)}imaginary part:\r\n{Utility.MakeMatrixString(ai)}";
         }
     }

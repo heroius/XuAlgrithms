@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Heroius.Extension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,19 @@ namespace Sample
                 builder.Append("\r\n");
             }
             return builder.ToString();
+        }
+
+        public static string SmartToString(object result)
+        {
+            if (result is double[,])
+            {
+                return MakeMatrixString(result as double[,]);
+            }
+            else if (result is double[])
+            {
+                return (result as double[]).Select(d=>d.ToString()).Merge(",");
+            }
+            return result.ToString();
         }
     }
 }

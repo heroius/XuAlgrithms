@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace Sample
 {
@@ -13,16 +15,26 @@ namespace Sample
         public MainWindow()
         {
             InitializeComponent();
-            Samples = new ObservableCollection<SampleItem>();
+            Samples = new List<SampleSection>();
             foreach (var key in Heroius.XuAlgrithms.Utility.Mapping.GetAllAlgrithmNames())
             {
-                var o = Activator.CreateInstance(null, $"Sample.Samples.{key}").Unwrap() as SampleItem;
-                Samples.Add(o);
+                try
+                {
+                    var o = Activator.CreateInstance(null, $"Sample.{key}").Unwrap() as SampleItem;
+                    if (!Samples.Exists(s=>s.Section == o.Section))
+                    {
+                        Samples.Add(new SampleSection() { Section = o.Section, Algrithms = new List<SampleItem>() });
+                    }
+                    Samples.First(s=>s.Section == o.Section).Algrithms.Add(o);
+                }
+                catch {
+                    //pass undefined sample
+                }
             }
             DataContext = this;
         }
 
-        public ObservableCollection<SampleItem> Samples { get; set; }
+        public List<SampleSection> Samples { get; set; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -33,5 +45,11 @@ namespace Sample
             }
             catch (Exception ex) { TbResult.Text = ex.Message; }
         }
+    }
+
+    public class SampleSection
+    {
+        public string Section { get; set; }
+        public List<SampleItem> Algrithms { get; set; }
     }
 }

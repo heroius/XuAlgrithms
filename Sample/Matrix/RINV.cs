@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class RINV: SampleItem
     {
-        public RINV() : base("RINV") { }
+        public RINV() : base("Matrix.RINV") { }
 
         public override string Execute()
         {
@@ -18,7 +18,7 @@ namespace Sample.Samples
                 { 0.1582, 1.1675, 0.1768, 0.1871 },
                 { 0.1968, 0.2071, 1.2168, 0.2277 }
             };
-            Heroius.XuAlgrithms.Algrithms.RINV(a);
+            Heroius.XuAlgrithms.Matrix.RINV(a);
             return Utility.MakeMatrixString(a);
         }
     }

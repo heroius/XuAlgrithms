@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class CHOL:SampleItem
     {
-        public CHOL() : base("CHOL") { }
+        public CHOL() : base("Matrix.CHOL") { }
 
         public override string Execute()
         {
@@ -18,7 +18,7 @@ namespace Sample.Samples
                 {6,8,10,9 },
                 {5,7,9,10 }
             };
-            return Heroius.XuAlgrithms.Algrithms.CHOL(a).ToString();
+            return Heroius.XuAlgrithms.Matrix.CHOL(a).ToString();
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace Sample.Samples
+﻿namespace Sample.Matrix
 {
     public class TRMUL : SampleItem
     {
-        public TRMUL() : base("TRMUL") { }
+        public TRMUL() : base("Matrix.TRMUL") { }
 
         public override string Execute()
         {
@@ -19,7 +19,7 @@
                 {0,3,-5 },
                 {9,8,-6 }
             };
-            var c = Heroius.XuAlgrithms.Algrithms.TRMUL(a, b);
+            var c = Heroius.XuAlgrithms.Matrix.TRMUL(a, b);
             return Utility.MakeMatrixString(c);
         }
     }

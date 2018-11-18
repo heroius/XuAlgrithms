@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sample.Samples
+namespace Sample.Matrix
 {
     public class GINV:SampleItem
     {
-        public GINV() : base("GINV") { }
+        public GINV() : base("Matrix.GINV") { }
 
         public override string Execute()
         {
@@ -20,7 +20,7 @@ namespace Sample.Samples
                 {2,4,3,4 }
             };
             double eps = 0.000001;
-            Heroius.XuAlgrithms.Algrithms.GINV(a, eps, out double[,] aa, out double[,] u, out double[,] v);
+            Heroius.XuAlgrithms.Matrix.GINV(a, eps, out double[,] aa, out double[,] u, out double[,] v);
             return Utility.MakeMatrixString(aa);
         }
     }

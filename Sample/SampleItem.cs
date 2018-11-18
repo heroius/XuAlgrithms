@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Heroius.XuAlgrithms.Utility;
 
 namespace Sample
 {
@@ -10,13 +12,16 @@ namespace Sample
     {
         public SampleItem(string name)
         {
-            Name = name;
-            Tooltip = Heroius.XuAlgrithms.Utility.Mapping.GetDescription(Name);
+            var part = name.Split('.');
+            Section = $"{part[0]} : {Mapping.GetSectionDescription(part[0])}";
+            Name = $"{part[1]} : {Mapping.GetDescription(name)}";
+            Tooltip = Mapping.GetDescription(name);
         }
 
-        public string Name { get; set; }
-        public string Tooltip { get; set; }
-
+        public string Section { get; private set; }
+        public string Name { get; private set; }
+        public string Tooltip { get; private set; }
+        
         public abstract string Execute();
     }
 }

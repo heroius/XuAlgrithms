@@ -128,7 +128,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "GMQR", "求解线性最小二乘问题的豪斯荷尔德变换法" ),
                 new Tuple<string, string>( "GMIV", "求解线性最小二乘问题的广义逆法" ),
                 new Tuple<string, string>( "BINT", "求解病态方程组" )})/*,
-            new Tuple<string, string, Tuple<string, string>[]>("", "非线性方程与方程组的求解", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("NonlinearEquations", "非线性方程与方程组的求解", new Tuple<string, string>[] {
                 new Tuple<string, string>( "DHRT", "求非线性方程实根的对分法" ),
                 new Tuple<string, string>( "NEWT", "求非线性方程一个实根的牛顿法" ),
                 new Tuple<string, string>( "ATKN", "求非线性方程一个实根的埃特金迭代法" ),
@@ -143,7 +143,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "MTCL", "求非线性方程一个实根的蒙特卡罗法" ),
                 new Tuple<string, string>( "CMTC", "求实函数或复函数方程一个复根的蒙特卡罗法" ),
                 new Tuple<string, string>( "NMTC", "求非线性方程组一组实根的蒙特卡罗法" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "多项式计算", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("Polynomial", "多项式计算", new Tuple<string, string>[] {
                 new Tuple<string, string>( "PLYV", "一维多项式求值" ),
                 new Tuple<string, string>( "PLYS", "一维多项式多组求值" ),
                 new Tuple<string, string>( "BPLY", "二维多项式求值" ),
@@ -154,7 +154,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "CPDV", "复系数多项式相除" ),
                 new Tuple<string, string>( "POLYNOMIAL", "实系数多项式类" ),
                 new Tuple<string, string>( "COM_POLY", "复系数多项式类" )}) ,
-            new Tuple<string, string, Tuple<string, string>[]>("", "复数运算", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("Complex", "复数运算", new Tuple<string, string>[] {
                 new Tuple<string, string>( "CMUL", "复数乘法" ),
                 new Tuple<string, string>( "CDIV", "复数出发" ),
                 new Tuple<string, string>( "POWR", "复数乘幂" ),
@@ -164,14 +164,14 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "CSIN", "复数正弦" ),
                 new Tuple<string, string>( "CCOS", "复数余弦" ),
                 new Tuple<string, string>( "COMPLEX", "复数类" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "随机数的产生", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("Random", "随机数的产生", new Tuple<string, string>[] {
                 new Tuple<string, string>( "RND1", "产生0~1之间均匀分布的一个随机数" ),
                 new Tuple<string, string>( "RNDS", "产生0~1之间均匀分布的随机数序列" ),
                 new Tuple<string, string>( "RAB1", "产生任意区间内均匀分布的一个随机整数" ),
                 new Tuple<string, string>( "RABS", "产生任意区间内均匀分布的随机整数序列" ),
                 new Tuple<string, string>( "GRN1", "产生任意均值与方差的正态分布的一个随机数" ),
                 new Tuple<string, string>( "GRNS", "产生任意均值与方差的正态分布的随机数序列" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "插值与逼近", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("InterpolationApproximation", "插值与逼近", new Tuple<string, string>[] {
                 new Tuple<string, string>( "LGR", "一元全区间插值" ),
                 new Tuple<string, string>( "LG3", "一元三点插值" ),
                 new Tuple<string, string>( "PQS", "连分式插值" ),
@@ -187,7 +187,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "CHIR", "切比雪夫曲线拟合" ),
                 new Tuple<string, string>( "REMZ", "最佳一致逼近的里米兹方法" ),
                 new Tuple<string, string>( "PIR2", "矩形域的最小二乘曲面拟合" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "数值积分", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("NumericalIntegration", "数值积分", new Tuple<string, string>[] {
                 new Tuple<string, string>( "FFTS", "变步长梯形求积法" ),
                 new Tuple<string, string>( "SIMP", "变步长辛卜生求积法" ),
                 new Tuple<string, string>( "FPTS", "自适应梯形求积法" ),
@@ -203,7 +203,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "GAUS", "计算多重积分的高斯方法" ),
                 new Tuple<string, string>( "PQG2", "计算二重积分的连分式法" ),
                 new Tuple<string, string>( "MTML", "计算多重积分的蒙特卡罗法" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "常微分方程组的求解", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("ODEs", "常微分方程组的求解", new Tuple<string, string>[] {
                 new Tuple<string, string>( "ELR1", "全区间积分的定步长欧拉方法" ),
                 new Tuple<string, string>( "ELR2", "积分一步的变步长欧拉方法" ),
                 new Tuple<string, string>( "WITY", "全区间积分的维梯方法" ),
@@ -218,27 +218,27 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "TNR", "积分一步的特雷纳方法" ),
                 new Tuple<string, string>( "GEAR", "积分刚性方程组的吉尔方法" ),
                 new Tuple<string, string>( "DFTE", "求解二阶微分方程边值问题的差分法" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "数据处理", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("DataProcessing", "数据处理", new Tuple<string, string>[] {
                 new Tuple<string, string>( "RHIS", "随机样本分析" ),
                 new Tuple<string, string>( "SQT1", "一元线性回归分析" ),
                 new Tuple<string, string>( "SQT2", "多元线性回归分析" ),
                 new Tuple<string, string>( "SQT3", "逐步回归分析" ),
                 new Tuple<string, string>( "LOG1", "半对数数据相关" ),
                 new Tuple<string, string>( "LOG2", "对数数据相关" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "极值问题的求解", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("Extremum", "极值问题的求解", new Tuple<string, string>[] {
                 new Tuple<string, string>( "MAX1", "一维极值连分式法" ),
                 new Tuple<string, string>( "MAXN", "n维极值连分式法" ),
                 new Tuple<string, string>( "LPLQ", "不等式约束线性规划问题" ),
                 new Tuple<string, string>( "JSIM", "求n维极值的单形调优法" ),
                 new Tuple<string, string>( "CPLX", "求约束条件下n维极值的复形调优法" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "数学变换与滤波", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("Transformation", "数学变换与滤波", new Tuple<string, string>[] {
                 new Tuple<string, string>( "FOUR", "傅里叶级数逼近" ),
                 new Tuple<string, string>( "KFFT", "快速傅里叶变换" ),
                 new Tuple<string, string>( "KFWT", "快速沃什变换" ),
                 new Tuple<string, string>( "KSPT", "五点三次平滑" ),
                 new Tuple<string, string>( "LMAN", "离散随机线性系统的卡尔曼滤波" ),
                 new Tuple<string, string>( "KABG", "α-β-γ滤波" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "特殊函数的计算", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("SpecialFunctions", "特殊函数的计算", new Tuple<string, string>[] {
                 new Tuple<string, string>( "GAM1", "伽马函数" ),
                 new Tuple<string, string>( "GAM2", "不完全伽马函数" ),
                 new Tuple<string, string>( "ERRF", "误差函数" ),
@@ -256,7 +256,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "EXPP", "指数积分" ),
                 new Tuple<string, string>( "ELP1", "第一类椭圆积分" ),
                 new Tuple<string, string>( "ELP2", "第二类椭圆积分" )}) ,
-            new Tuple<string, string, Tuple<string, string>[]>("", "排序", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("Sorting", "排序", new Tuple<string, string>[] {
                 new Tuple<string, string>( "IBUB", "冒泡排序" ),
                 new Tuple<string, string>( "IQCK", "快速排序" ),
                 new Tuple<string, string>( "ISHL", "希尔排序" ),
@@ -264,7 +264,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "IKEY", "结构排序" ),
                 new Tuple<string, string>( "DISK", "磁盘文件排序" ),
                 new Tuple<string, string>( "TOPO", "拓扑分类" )}),
-            new Tuple<string, string, Tuple<string, string>[]>("", "查找", new Tuple<string, string>[] {
+            new Tuple<string, string, Tuple<string, string>[]>("Searching", "查找", new Tuple<string, string>[] {
                 new Tuple<string, string>( "ISECH", "结构体数组的顺序查找" ),
                 new Tuple<string, string>( "DSCH", "磁盘随机文本文件的顺序查找" ),
                 new Tuple<string, string>( "IBSH", "有序数组的对分查找" ),

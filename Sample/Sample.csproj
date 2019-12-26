@@ -72,6 +72,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="NonlinearEquations\CSRT.cs" />
+    <Compile Include="NonlinearEquations\NETN.cs" />
+    <Compile Include="NonlinearEquations\SNSE.cs" />
+    <Compile Include="NonlinearEquations\SRRT.cs" />
+    <Compile Include="NonlinearEquations\PQRT.cs" />
+    <Compile Include="NonlinearEquations\ATKN.cs" />
+    <Compile Include="NonlinearEquations\DHRT.cs" />
+    <Compile Include="NonlinearEquations\NEWT.cs" />
     <Compile Include="SampleItem.cs" />
     <Compile Include="MatrixEigen\SSTQ.cs" />
     <Compile Include="Matrix\CHOL.cs" />

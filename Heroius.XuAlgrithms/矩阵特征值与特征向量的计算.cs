@@ -241,7 +241,7 @@ namespace Heroius.XuAlgrithms
         }
 
         /// <summary>
-        /// 用带原点惟一的双重步QR方法计算实上H矩阵的全部特征值。
+        /// 用带原点位移的双重步QR方法计算实上H矩阵的全部特征值。
         /// </summary>
         /// <param name="a">存放上H矩阵A</param>
         /// <param name="eps">控制精度要求</param>

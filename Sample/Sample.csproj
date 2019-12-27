@@ -75,6 +75,7 @@
     <Compile Include="NonlinearEquations\CSRT.cs" />
     <Compile Include="NonlinearEquations\NETN.cs" />
     <Compile Include="NonlinearEquations\SNSE.cs" />
+    <Compile Include="NonlinearEquations\NGIN.cs" />
     <Compile Include="NonlinearEquations\SRRT.cs" />
     <Compile Include="NonlinearEquations\PQRT.cs" />
     <Compile Include="NonlinearEquations\ATKN.cs" />

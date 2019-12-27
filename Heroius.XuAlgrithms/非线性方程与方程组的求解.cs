@@ -962,7 +962,120 @@ namespace Heroius.XuAlgrithms
             return k - l;
         }
 
-
-
+        /// <summary>
+        /// 利用广义逆法求解无约束条件下的优化问题
+        /// <para>f(X0,X1,...,Xn-1)=0,i=0,1,...,m-1,m≥n</para>
+        /// 当 m = n 时，即为求解非线性方程组
+        /// </summary>
+        /// <param name="m">非线性方程组中方程个数</param>
+        /// <param name="n">非线性方程组中未知数个数</param>
+        /// <param name="eps1">控制最小二乘解的精度要求</param>
+        /// <param name="eps2">用于奇异值分解中的控制精度要求</param>
+        /// <param name="x">存放非线性方程组解的初始近似值X(O),要求各分扯不全为0。返回最小二乘解，当 m = n 时，即为非线性方程组的一组解</param>
+        /// <param name="ka">ka=max(m,n)+1</param>
+        /// <param name="f">指向计算非线性方程组中各方程左端函数值的函数</param>
+        /// <param name="s">指向计算雅可比矩阵的函数名</param>
+        /// <returns>函数返回一个标志值 。 
+        /// 若返回值小于 0, 则说明在 奇异值分解 中迭代超过了 60 次还未满足精度要求；
+        /// 若返回值等千 0, 则说明本函数迭代次还未满足精度要求；
+        /// 若返回值大于 o, 则表示正常返回</returns>
+        public static int NGIN(int m, int n, double eps1, double eps2, double[] x, int ka, NGIN_Func f, NGIN_Func s)
+        {
+            int i, j, k, l = 60, kk, jt;
+            double[] y = new double[10], b = new double[10], p = new double[m*n], d = new double[m], pp = new double[n*m], dx = new double[n], u=new double[m*m], v = new double[n*n], w = new double[ka];
+            double alpha = 1.0, z=0, h2, y1, y2, y3, y0, h1;
+            double[,] p_t, pp_t, u_t, v_t;
+            while (l>0)
+            {
+                f(m, n, x, ref d);
+                s(m, n, x, ref p);
+                p_t = Utility.C.Convert(p, m, n);
+                try
+                {
+                    dx = LinearEquations.GMIV(p_t, d, eps2, out pp_t, out u_t, out v_t);
+                }
+                catch
+                {
+                    return -1;
+                }
+                p = Utility.C.Convert(p_t);
+                pp = Utility.C.Convert(pp_t);
+                u = Utility.C.Convert(u_t);
+                v = Utility.C.Convert(v_t);
+                j = 0;
+                jt = 1;
+                h2 = 0;
+                while (jt==1)
+                {
+                    jt = 0;
+                    if (j <= 2) z = alpha + 0.01 * j;
+                    else z = h2;
+                    for (i = 0; i <= n - 1; i++) w[i] = x[i] - z * dx[i];
+                    f(m, n, w, ref d);
+                    y1 = 0;
+                    for (i = 0; i <= m - 1; i++) y1 = y1 + d[i] * d[i];
+                    for (i = 0; i <= n - 1; i++) w[i] = x[i] - (z + 0.00001) * dx[i];
+                    f(m, n, w, ref d);
+                    y2 = 0;
+                    for (i = 0; i <= m - 1; i++) y2 = y2 + d[i] * d[i];
+                    y0 = (y2 - y1) / 0.00001;
+                    if (Math.Abs(y0)>1e-10)
+                    {
+                        h1 = y0;
+                        h2 = z;
+                        if (j == 0)
+                        {
+                            y[0] = h1;
+                            b[0] = h2;
+                        }
+                        else
+                        {
+                            y[j] = h1;
+                            kk = 0;
+                            k = 0;
+                            while ((kk==0)&&(k<=j-1))
+                            {
+                                y3 = h2 - b[k];
+                                if (Math.Abs(y3) == 0) kk = 1;
+                                else h2 = (h1 - y[k]) / y3;
+                                k++;
+                            }
+                            b[j] = h2;
+                            if (kk != 0) b[j] = 1e35;
+                            h2 = 0;
+                            for (k = j - 1; k >= 0; k--) h2 = -y[k] / (b[k + 1] + h2);
+                            h2 += b[0];
+                        }
+                        j++;
+                        if (j <= 7) jt = 1;
+                        else z = h2;
+                    }
+                }
+                alpha = z;
+                y1 = 0;
+                y2 = 0;
+                for (i = 0; i <= n - 1; i++)
+                {
+                    dx[i] = -alpha * dx[i];
+                    x[i] = x[i] + dx[i];
+                    y1 = y1 + Math.Abs(dx[i]);
+                    y2 = y2 + Math.Abs(x[i]);
+                }
+                if (y1 < eps1 * y2)
+                {
+                    return 1;
+                }
+                l--;
+            }
+            return 0;
+        }
+        /// <summary>
+        /// 指向计算非线性方程组中各方程左端函数值的函数，或计算雅可比矩阵的函数名
+        /// </summary>
+        /// <param name="m">非线性方程组中方程个数</param>
+        /// <param name="n">非线性方程组中未知数个数</param>
+        /// <param name="x">存放非线性方程组解的初始近似值,要求各分扯不全为 0 </param>
+        /// <param name="dp">左端函数值，或雅可比矩阵</param>
+        public delegate void NGIN_Func(int m, int n, double[] x, ref double[] dp);
     }
 }

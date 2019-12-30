@@ -982,10 +982,10 @@ namespace Heroius.XuAlgrithms
         public static int NGIN(int m, int n, double eps1, double eps2, double[] x, int ka, NGIN_Func f, NGIN_Func s)
         {
             int i, j, k, l = 60, kk, jt;
-            double[] y = new double[10], b = new double[10], p = new double[m*n], d = new double[m], pp = new double[n*m], dx = new double[n], u=new double[m*m], v = new double[n*n], w = new double[ka];
-            double alpha = 1.0, z=0, h2, y1, y2, y3, y0, h1;
+            double[] y = new double[10], b = new double[10], p = new double[m * n], d = new double[m], pp = new double[n * m], dx = new double[n], u = new double[m * m], v = new double[n * n], w = new double[ka];
+            double alpha = 1.0, z = 0, h2, y1, y2, y3, y0, h1;
             double[,] p_t, pp_t, u_t, v_t;
-            while (l>0)
+            while (l > 0)
             {
                 f(m, n, x, ref d);
                 s(m, n, x, ref p);
@@ -1005,7 +1005,7 @@ namespace Heroius.XuAlgrithms
                 j = 0;
                 jt = 1;
                 h2 = 0;
-                while (jt==1)
+                while (jt == 1)
                 {
                     jt = 0;
                     if (j <= 2) z = alpha + 0.01 * j;
@@ -1019,7 +1019,7 @@ namespace Heroius.XuAlgrithms
                     y2 = 0;
                     for (i = 0; i <= m - 1; i++) y2 = y2 + d[i] * d[i];
                     y0 = (y2 - y1) / 0.00001;
-                    if (Math.Abs(y0)>1e-10)
+                    if (Math.Abs(y0) > 1e-10)
                     {
                         h1 = y0;
                         h2 = z;
@@ -1033,7 +1033,7 @@ namespace Heroius.XuAlgrithms
                             y[j] = h1;
                             kk = 0;
                             k = 0;
-                            while ((kk==0)&&(k<=j-1))
+                            while ((kk == 0) && (k <= j - 1))
                             {
                                 y3 = h2 - b[k];
                                 if (Math.Abs(y3) == 0) kk = 1;
@@ -1077,5 +1077,141 @@ namespace Heroius.XuAlgrithms
         /// <param name="x">存放非线性方程组解的初始近似值,要求各分扯不全为 0 </param>
         /// <param name="dp">左端函数值，或雅可比矩阵</param>
         public delegate void NGIN_Func(int m, int n, double[] x, ref double[] dp);
+
+        /// <summary>
+        /// 用蒙特卡罗 (Monte Carlo) 法求非线性方程 f(x) = 0 的 一个实根
+        /// </summary>
+        /// <param name="x">指向初值，返回时指向方程根的终值</param>
+        /// <param name="b">均匀分布随机数的端点初值</param>
+        /// <param name="m">控制调节 b 的参数</param>
+        /// <param name="eps">控制精度要求</param>
+        /// <param name="func">指向计算方程左端函数值 f(x) 的函数</param>
+        public static void MTCL(ref double x, double b, int m, double eps, Func<double, double> func)
+        {
+            int k = 1;
+            double xx = x, a = b, r = 1, y = func(xx), x1, y1;
+            while (a >= eps)
+            {
+                x1 = Math.Round(r);
+                x1 = -a + 2 * a * x1;
+                x1 += -xx;
+                y1 = func(x1);
+                k++;
+                if (Math.Abs(y1) >= Math.Abs(y))
+                {
+                    if (k > m)
+                    {
+                        k = 1;
+                        a = a / 2;
+                    }
+                }
+                else
+                {
+                    k = 1;
+                    xx = x1;
+                    y = y1;
+                    if (Math.Abs(y) < eps)
+                    {
+                        x = xx;
+                        return;
+                    }
+                }
+            }
+            x = xx;
+            return;
+        }
+
+        /// <summary>
+        /// 用蒙特卡罗 (Monte Carlo) 法求实函数或复函数方程 f(z) =0 的一个复根。
+        /// </summary>
+        /// <param name="x">指向初值的实部，返回时分别指向复根终值的实部</param>
+        /// <param name="y">指向初值的虚部，返回时分别指向复根终值的虚部</param>
+        /// <param name="b">均匀分布随机数的端点初值</param>
+        /// <param name="m">控制调节 b 的参数</param>
+        /// <param name="eps">控制精度要求</param>
+        /// <param name="func">指向计算 ||f(z)|| 的函数
+        /// <para>第一参数：输入点实部</para>
+        /// <para>第二参数：输入点虚部</para>
+        /// <para>返回值：||f(z)||</para>
+        /// </param>
+        public static void CMTC(ref double x, ref double y, double b, int m, double eps, Func<double, double, double> func)
+        {
+            int k = 1;
+            double xx = x, yy = y, a = b, r = 1, z = func(xx, yy), x1, y1, z1;
+            while (a >= eps)
+            {
+                x1 = -a + 2 * a * Math.Round(r);
+                x1 += xx;
+                y1 = -a + 2 * a * Math.Round(r);
+                y1 += yy;
+                z1 = func(x1, y1);
+                k++;
+                if (z1 >= z)
+                {
+                    if (k > m)
+                    {
+                        k = 1;
+                        a = a / 2;
+                    }
+                }
+                else
+                {
+                    k = 1;
+                    xx = x1;
+                    yy = y1;
+                    z = z1;
+                    if(z<eps)
+                    {
+                        x = xx;
+                        y = yy;
+                        return;
+                    }
+                }
+            }
+            x = xx;
+            y = yy;
+            return;
+        }
+
+        /// <summary>
+        /// 用蒙特卡罗 (Monte Carlo) 法求非线性方程组的一组复根 
+        /// </summary>
+        /// <param name="x">存放一组实根初值，返回一组实根的终值</param>
+        /// <param name="n">方程个数，也是未知数的个数</param>
+        /// <param name="b">均匀分布随机数的端点初值</param>
+        /// <param name="m">控制调节 b 的参数</param>
+        /// <param name="eps">控制精度要求</param>
+        /// <param name="func">指向计算模函数 ||F||=√(Σf²) 的函数</param>
+        public static void NMTC(ref double[] x, int n, double b, int m, double eps, Func<double[], int, double> func)
+        {
+            int k = 1, i;
+            double a = b, r = 1, z = func(x, n), z1;
+            double[] y = new double[n];
+            while (a>=eps)
+            {
+                for (i = 0; i <= n - 1; i++)
+                {
+                    y[i] = -a + 2 * a * Math.Round(r) + x[i];
+                }
+                z1 = func(y, n);
+                k++;
+                if (z1 >= z)
+                {
+                    if (k > m)
+                    {
+                        k = 1;
+                        a = a / 2;
+                    }
+                }
+                else
+                {
+                    k = 1;
+                    for (i = 0; i <= n - 1; i++) x[i] = y[i];
+                    z = z1;
+                    if (z < eps) return;
+                }
+            }
+            return;
+        }
     }
 }

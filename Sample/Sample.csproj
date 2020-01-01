@@ -72,6 +72,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="InterpolationApproximation\SPL.cs" />
+    <Compile Include="InterpolationApproximation\PQS.cs" />
     <Compile Include="NonlinearEquations\CSRT.cs" />
     <Compile Include="NonlinearEquations\NETN.cs" />
     <Compile Include="NonlinearEquations\SNSE.cs" />
@@ -141,5 +143,6 @@
       <Name>Heroius.XuAlgrithms</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -164,7 +164,7 @@ namespace Heroius.XuAlgrithms.Utility
             new Tuple<string, string, Tuple<string, string>[]>("Random", "随机数的产生", new Tuple<string, string>[] {
                 new Tuple<string, string>( "RND1", "产生0~1之间均匀分布的一个随机数" ),
                 new Tuple<string, string>( "RNDS", "产生0~1之间均匀分布的随机数序列" ),
-                new Tuple<string, string>( "RAB1", "产生任意区间内均匀分布的一个随机整数" )})/*,
+                new Tuple<string, string>( "RAB1", "产生任意区间内均匀分布的一个随机整数" ),
                 new Tuple<string, string>( "RABS", "产生任意区间内均匀分布的随机整数序列" ),
                 new Tuple<string, string>( "GRN1", "产生任意均值与方差的正态分布的一个随机数" ),
                 new Tuple<string, string>( "GRNS", "产生任意均值与方差的正态分布的随机数序列" )}),
@@ -174,7 +174,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "PQS", "连分式插值" ),
                 new Tuple<string, string>( "HMT", "埃尔米特插值" ),
                 new Tuple<string, string>( "ATK", "埃特金逐步插值" ),
-                new Tuple<string, string>( "SPL", "光滑插值" ),
+                new Tuple<string, string>( "SPL", "光滑插值" )})/*,
                 new Tuple<string, string>( "SPL1", "第一种边界条件的三次样条函数插值、微商与积分" ),
                 new Tuple<string, string>( "SPL2", "第二种边界条件的三次样条函数插值、微商与积分" ),
                 new Tuple<string, string>( "SPL3", "第三种边界条件的三次样条函数插值、微商与积分" ),

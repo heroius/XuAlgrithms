@@ -396,5 +396,92 @@ namespace Heroius.XuAlgrithms
                 s[4] = s[0] + s[1] * p + s[2] * p * p + s[3] * p * p * p;
             }
         }
+
+        /// <summary>
+        /// 给定n个结点Xi(i=0,1,...,n—1)上的函数值Yi=f(Xi)以及两端点上的一阶导数值Y'0=f'(X0)与Y'n-1=f'(Xn-1)，
+        /// 利用三次样条函数计算各结点上的数值导数以及插值区间[X0,Xn-1]上的积分近似值s=∫f(x)dx，
+        /// 并对函数f(x)进行成组插值与成组微商。
+        /// </summary>
+        /// <param name="x">存放给定n个结点的值</param>
+        /// <param name="y">存放n个给定结点上的函数值</param>
+        /// <param name="n">给定结点的个数</param>
+        /// <param name="dy">dy[0]存放Y'0, dy[n-1]存放Y'n-1。
+        /// 返回n个给定节点处的一阶导数值Y'k(k=0,...,n-1)</param>
+        /// <param name="ddy">返回n个给定结点处的二阶导数值Y''k(k=0,...,n-1)</param>
+        /// <param name="t">存放m个指定插值点的值，要求X0<t(j)<Xn-1(j=0,...,m-1)</param>
+        /// <param name="m">指定插值点的个数</param>
+        /// <param name="z">返回m个指定插值点处的函数值</param>
+        /// <param name="dz">返回m个指定插值点处的一阶导数值</param>
+        /// <param name="ddz">返回m个指定插值点处的二阶导数值</param>
+        /// <returns>返回积分值s=∫f(x)dx</returns>
+        public static double SPL1(double[] x, double[] y, int n, ref double[] dy, out double[] ddy, double[] t, int m, out double[] z, out double[] dz, out double[] ddz)
+        {
+            ddy = new double[n];
+            z = new double[m];
+            dz = new double[m];
+            ddz = new double[m];
+
+            int i, j;
+            double h0, h1, alpha, beta, integ;
+
+            double[] s = new double[n];
+
+            s[0] = dy[0]; dy[0] = 0.0;
+            h0 = x[1] - x[0];
+            for (j = 1; j <= n - 2; j++)
+            {
+                h1 = x[j + 1] - x[j];
+                alpha = h0 / (h0 + h1);
+                beta = (1.0 - alpha) * (y[j] - y[j - 1]) / h0;
+                beta = 3.0 * (beta + alpha * (y[j + 1] - y[j]) / h1);
+                dy[j] = -alpha / (2.0 + (1.0 - alpha) * dy[j - 1]);
+                s[j] = (beta - (1.0 - alpha) * s[j - 1]);
+                s[j] = s[j] / (2.0 + (1.0 - alpha) * dy[j - 1]);
+                h0 = h1;
+            }
+            for (j = n - 2; j >= 0; j--)
+                dy[j] = dy[j] * dy[j + 1] + s[j];
+            for (j = 0; j <= n - 2; j++) s[j] = x[j + 1] - x[j];
+            for (j = 0; j <= n - 2; j++)
+            {
+                h1 = s[j] * s[j];
+                ddy[j] = 6.0 * (y[j + 1] - y[j]) / h1 - 2.0 * (2.0 * dy[j] + dy[j + 1]) / s[j];
+            }
+            h1 = s[n - 2] * s[n - 2];
+            ddy[n - 1] = 6.0* (y[n - 2] - y[n - 1]) / h1 + 2.0* (2.0* dy[n - 1] + dy[n - 2]) / s[n - 2]; //origin code .* err
+            integ = 0.0;
+            for (i = 0; i <= n - 2; i++)
+            {
+                h1 = 0.5 * s[i] * (y[i] + y[i + 1]);
+                h1 = h1 - s[i] * s[i] * s[i] * (ddy[i] + ddy[i + 1]) / 24.0;
+                integ = integ + h1;
+            }
+            for (j = 0; j <= m - 1; j++)
+            {
+                if (t[j] >= x[n - 1]) i = n - 2;
+                else
+                {
+                    i = 0;
+                    while (t[j] > x[i + 1]) i = i + 1;
+                }
+                h1 = (x[i + 1] - t[j]) / s[i];
+                h0 = h1 * h1;
+                z[j] = (3.0 * h0 - 2.0 * h0 * h1) * y[i];
+                z[j] = z[j] + s[i] * (h0 - h0 * h1) * dy[i];
+                dz[j] = 6.0 * (h0 - h1) * y[i] / s[i];
+                dz[j] = dz[j] + (3.0 * h0 - 2.0 * h1) * dy[i];
+                ddz[j] = (6.0 - 12.0 * h1) * y[i] / (s[i] * s[i]);
+                ddz[j] = ddz[j] + (2.0 - 6.0 * h1) * dy[i] / s[i];
+                h1 = (t[j] - x[i]) / s[i];
+                h0 = h1 * h1;
+                z[j] = z[j] + (3.0 * h0 - 2.0 * h0 * h1) * y[i + 1];
+                z[j] = z[j] - s[i] * (h0 - h0 * h1) * dy[i + 1];
+                dz[j] = dz[j] - 6.0 * (h0 - h1) * y[i + 1] / s[i];
+                dz[j] = dz[j] + (3.0 * h0 - 2.0 * h1) * dy[i + 1];
+                ddz[j] = ddz[j] + (6.0 - 12.0 * h1) * y[i + 1] / (s[i] * s[i]);
+                ddz[j] = ddz[j] - (2.0 - 6.0 * h1) * dy[i + 1] / s[i];
+            }
+            return integ;
+        }
     }
 }

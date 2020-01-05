@@ -600,10 +600,10 @@ namespace Heroius.XuAlgrithms
             ddz = new double[m];
 
             int i, j;
-            double 
-                h0 = x[n - 1] - x[n - 2], 
-                y0 = y[n - 1] - y[n - 2], 
-                h1, 
+            double
+                h0 = x[n - 1] - x[n - 2],
+                y0 = y[n - 1] - y[n - 2],
+                h1,
                 y1, alpha = 0, beta = 0, u, g;
 
             double[] s = new double[n];
@@ -634,7 +634,7 @@ namespace Heroius.XuAlgrithms
                 s[j] = dy[j] * s[j + 1] + s[j];
                 ddy[j] = dy[j] * ddy[j + 1] + ddy[j];
             }
-            dy[n - 2] = (beta - alpha * ddy[1] - (1.0 - alpha) * ddy[n - 2]) / 
+            dy[n - 2] = (beta - alpha * ddy[1] - (1.0 - alpha) * ddy[n - 2]) /
                 (alpha * s[1] + (1.0 - alpha) * s[n - 2] + 2.0);
             for (j = 2; j <= n - 1; j++)
                 dy[j - 2] = s[j - 1] * dy[n - 2] + ddy[j - 1];
@@ -682,7 +682,684 @@ namespace Heroius.XuAlgrithms
             return g;
         }
 
+        /// <summary>
+        /// 给定矩形域上 n×m 个结点 (Xk,Yj)(k=0,l,…,n-1; j=0,1,…,m-1) 上的
+        /// 函数值 Zkj = z(Xk, Yj), 利用二元三点插值公式计算指定插值点 (u, v) 处的函数值 w =z(u, v) 。
+        /// </summary>
+        /// <param name="x">存放给定 n×m 个结点 X 方向的 n 个坐标</param>
+        /// <param name="y">存放给定 n×m 个结点 Y 方向的 m 个坐标</param>
+        /// <param name="z">存放给定 n×m 个结点上的函数值</param>
+        /// <param name="n">给定结点在 X 方向上的坐标个数</param>
+        /// <param name="m">给定结点在 Y 方向上的坐标个数</param>
+        /// <param name="u">指定插值点的 X 坐标</param>
+        /// <param name="v">指定插值点的 Y 坐标</param>
+        /// <returns>函数返回指定插值点 (u, v) 处的函数近似值</returns>
+        public static double SLQ3(double[] x, double[] y, double[,] z, int n, int m, double u, double v)
+        {
+            int nn = 3, mm = 3, ip, iq, i, j, k, l;
+            double h, w;
+            double[] b = new double[3];
+            double[] zz = Utility.C.Convert(z);
+            if (n <= 3) { ip = 0; nn = n; }
+            else if (u <= x[1]) ip = 0;
+            else if (u >= x[n - 2]) ip = n - 3;
+            else
+            {
+                i = 1;
+                j = n;
+                while (((i - j) != 1) && ((i - j) != -1))
+                {
+                    l = (i + j) / 2;
+                    if (u < x[l - 1]) j = l;
+                    else i = l;
+                }
+                if (Math.Abs(u - x[i - 1]) < Math.Abs(u - x[j - 1])) ip = i - 2;
+                else ip = i - 1;
+            }
+            if (m <= 3) { iq = 0; mm = m; }
+            else if (v <= y[1]) iq = 0;
+            else if (v >= y[m - 2]) iq = m - 3;
+            else
+            {
+                i = 1;
+                j = m;
+                while (((i - j) != 1) && ((i - j) != -1))
+                {
+                    l = (i + j) / 2;
+                    if (v < y[l - 1]) j = l;
+                    else i = l;
+                }
+                if (Math.Abs(v - y[i - 1]) < Math.Abs(v - y[j - 1])) iq = i - 2;
+                else iq = i - 1;
+            }
+            for (i = 0; i <= nn - 1; i++)
+            {
+                b[i] = 0;
+                for (j = 0; j <= mm - 1; j++)
+                {
+                    k = m * (ip + i) + (iq + j);
+                    h = zz[k];
+                    for (k = 0; k <= mm - 1; k++)
+                        if (k != j)
+                            h = h * (v - y[iq + k]) / (y[iq + j] - y[iq + k]);
+                    b[i] = b[i] + h;
+                }
+            }
+            w = 0;
+            for (i = 0; i <= nn - 1; i++)
+            {
+                h = b[i];
+                for (j = 0; j <= nn - 1; j++)
+                    if (j != i)
+                        h = h * (u - x[ip + j]) / (x[ip + i] - x[ip + j]);
+                w += h;
+            }
+            return w;
+        }
 
+        /// <summary>
+        /// 给定矩形域上 n×m 个结点 (Xk,Yj)(k=0,l,…,n-1; j=0,1,…,m-1) 上的
+        /// 函数值 Zkj = z(Xk, Yj), 利用二元插值公式计算指定插值点 (u, v) 处的函数值 w =z(u, v) 。
+        /// </summary>
+        /// <param name="x">存放给定 n×m 个结点 X 方向的 n 个坐标</param>
+        /// <param name="y">存放给定 n×m 个结点 Y 方向的 m 个坐标</param>
+        /// <param name="z">存放给定 n×m 个结点上的函数值</param>
+        /// <param name="n">给定结点在 X 方向上的坐标个数</param>
+        /// <param name="m">给定结点在 Y 方向上的坐标个数</param>
+        /// <param name="u">指定插值点的 X 坐标</param>
+        /// <param name="v">指定插值点的 Y 坐标</param>
+        /// <returns>函数返回指定插值点 (u, v) 处的函数近似值</returns>
+        public static double SLGQ(double[] x, double[] y, double[,] z, int n, int m, double u, double v)
+        {
+            int ip, ipp, i, j, kk, iq, iqq, k;
+            double h; double[] b = new double[10];
+            double f;
 
+            if (u <= x[0]) { ip = 1; ipp = 4; }
+            else if (u >= x[n - 1]) { ip = n - 3; ipp = n; }
+            else
+            {
+                i = 1; j = n;
+                while (((i - j) != 1) && ((i - j) != -1))
+                {
+                    kk = (i + j) / 2;
+                    if (u < x[kk - 1]) j = kk;
+                    else i = kk;
+                }
+                ip = i - 3; ipp = i + 4;
+            }
+            if (ip < 1) ip = 1;
+            if (ipp > n) ipp = n;
+            if (v <= y[0]) { iq = 1; iqq = 4; }
+            else if (v >= y[m - 1]) { iq = m - 3; iqq = m; }
+            else
+            {
+                i = 1; j = m;
+                while (((i - j) != 1) && ((i - j) != -1))
+                {
+                    kk = (i + j) / 2;
+                    if (v < y[kk - 1]) j = kk;
+                    else i = kk;
+                }
+                iq = i - 3; iqq = i + 4;
+            }
+            if (iq < 1) iq = 1;
+            if (iqq > m) iqq = m;
+            for (i = ip - 1; i <= ipp - 1; i++)
+            {
+                b[i - ip + 1] = 0.0;
+                for (j = iq - 1; j <= iqq - 1; j++)
+                {
+                    h = z[i, j];
+                    for (k = iq - 1; k <= iqq - 1; k++)
+                        if (k != j) h = h * (v - y[k]) / (y[j] - y[k]);
+                    b[i - ip + 1] = b[i - ip + 1] + h;
+                }
+            }
+            f = 0.0;
+            for (i = ip - 1; i <= ipp - 1; i++)
+            {
+                h = b[i - ip + 1];
+                for (j = ip - 1; j <= ipp - 1; j++)
+                    if (j != i) h = h * (u - x[j]) / (x[i] - x[j]);
+                f = f + h;
+            }
+            return f;
+        }
+
+        /// <summary>
+        /// 用最小二乘法求给定数据点的拟合多项式
+        /// </summary>
+        /// <param name="x">存放给定 n 个数据点的 X 坐标</param>
+        /// <param name="y">存放给定 n 个数据点的 Y 坐标</param>
+        /// <param name="n">给定数据点的个数</param>
+        /// <param name="a">返回 m-1 次拟合多项式的 m 个系数</param>
+        /// <param name="m">拟合多项式的项数，即拟合多项式的最高次为 m-1 。要求 m≤n 且 m≤20 。若
+        /// m>n 或 m>20, 则本函数自动按 m = min{n,20} 处理</param>
+        /// <param name="dt">dt[0] 返回拟合多项式与各数据点误差的平方和，dt[1]返回拟合多项式与各数据
+        /// 点误差的绝对值之和，dt[2]返回拟合多项式与各数据点误差绝对值的最大值</param>
+        public static void PIR1(double[] x, double[] y, int n, out double[] a, int m, out double[] dt)
+        {
+            int i, j, k;
+            double z, p, c, g, q = 0, d1, d2;
+            double[] s = new double[20], t = new double[20], b = new double[20];
+
+            a = new double[m];
+            dt = new double[3];
+
+            for (i = 0; i <= m; i++) a[i] = 0.0;
+            if (m + 1 > n) m = n - 1;
+            if (m > 19) m = 19;
+            z = 0.0;
+            for (i = 0; i <= n - 1; i++) z = z + x[i] / (1.0 * n);
+            b[0] = 1.0; d1 = 1.0 * n; p = 0.0; c = 0.0;
+            for (i = 0; i <= n - 1; i++)
+            { p = p + (x[i] - z); c = c + y[i]; }
+            c = c / d1; p = p / d1;
+            a[0] = c * b[0];
+            if (m > 0)
+            {
+                t[1] = 1.0; t[0] = -p;
+                d2 = 0.0; c = 0.0; g = 0.0;
+                for (i = 0; i <= n - 1; i++)
+                {
+                    q = x[i] - z - p; d2 = d2 + q * q;
+                    c = c + y[i] * q;
+                    g = g + (x[i] - z) * q * q;
+                }
+                c = c / d2; p = g / d2; q = d2 / d1;
+                d1 = d2;
+                a[1] = c * t[1]; a[0] = c * t[0] + a[0];
+            }
+            for (j = 2; j <= m; j++)
+            {
+                s[j] = t[j - 1];
+                s[j - 1] = -p * t[j - 1] + t[j - 2];
+                if (j >= 3)
+                    for (k = j - 2; k >= 1; k--)
+                        s[k] = -p * t[k] + t[k - 1] - q * b[k];
+                s[0] = -p * t[0] - q * b[0];
+                d2 = 0.0; c = 0.0; g = 0.0;
+                for (i = 0; i <= n - 1; i++)
+                {
+                    q = s[j];
+                    for (k = j - 1; k >= 0; k--)
+                        q = q * (x[i] - z) + s[k];
+                    d2 = d2 + q * q; c = c + y[i] * q;
+                    g = g + (x[i] - z) * q * q;
+                }
+                c = c / d2; p = g / d2; q = d2 / d1;
+                d1 = d2;
+                a[j] = c * s[j]; t[j] = s[j];
+                for (k = j - 1; k >= 0; k--)
+                {
+                    a[k] = c * s[k] + a[k];
+                    b[k] = t[k]; t[k] = s[k];
+                }
+            }
+            dt[0] = 0.0; dt[1] = 0.0; dt[2] = 0.0;
+            for (i = 0; i <= n - 1; i++)
+            {
+                q = a[m];
+                for (k = m - 1; k >= 0; k--)
+                    q = a[k] + q * (x[i] - z);
+                p = q - y[i];
+                if (Math.Abs(p) > dt[2]) dt[2] = Math.Abs(p);
+                dt[0] = dt[0] + p * p;
+                dt[1] = dt[1] + Math.Abs(p);
+            }
+        }
+
+        /// <summary>
+        /// 给定 n 个数据点，求切比雪夫 (Chebyshev) 意义上的最佳拟合多项式 。
+        /// </summary>
+        /// <param name="x">存放给定 n 个数据点的 X 坐标</param>
+        /// <param name="y">存放给定 n 个数据点的 Y 坐标</param>
+        /// <param name="n">给定数据点的个数</param>
+        /// <param name="a">前 m 个 元素返回 m-1 次拟合多项式的 m 个系数；
+        /// 最后一个元素 a[m] 返回拟合多项式 Pm-1(x) 的偏差最大值。
+        /// 若 a[m] 为负值，则说明在迭代过程中参考偏差不再增大，其绝对值为当前选择的参考偏差</param>
+        /// <param name="m">拟合多项式的项数，即拟合多项式的最高次为 m-1 。要求 m≤n 且 m≤20 。若
+        /// m>n 或 m>20, 则本函数自动按 m = min{n,20} 处理</param>
+        public static void CHIR(double[] x, double[] y, int n, out double[] a, int m)
+        {
+            int m1, i, j, l, ii, k, im;
+            int[] ix = new int[21];
+            double ha, hh, y1, y2, h1, h2, d, hm;
+            double[] h = new double[21];
+
+            a = new double[m + 1];
+
+            for (i = 0; i <= m + 1; i++) a[i] = 0.0;
+            if (m >= n) m = n - 2;
+            if (m >= 20) m = 18;
+            m1 = m + 2;
+            ha = 0.0;
+            ix[0] = 0; ix[m + 1] = n - 1;
+            l = (n - 1) / (m + 1); j = l;
+            for (i = 1; i <= m; i++)
+            { ix[i] = j; j = j + l; }
+            while (1 == 1)
+            {
+                hh = 1.0;
+                for (i = 0; i <= m + 1; i++)
+                { a[i] = y[ix[i]]; h[i] = -hh; hh = -hh; }
+                for (j = 1; j <= m + 1; j++)
+                {
+                    ii = m1; y2 = a[ii - 1]; h2 = h[ii - 1];
+                    for (i = j; i <= m + 1; i++)
+                    {
+                        d = x[ix[ii - 1]] - x[ix[m1 - i - 1]];
+                        y1 = a[m - i + j];
+                        h1 = h[m - i + j];
+                        a[ii - 1] = (y2 - y1) / d;
+                        h[ii - 1] = (h2 - h1) / d;
+                        ii = m - i + j + 1; y2 = y1; h2 = h1;
+                    }
+                }
+                hh = -a[m + 1] / h[m + 1];
+                for (i = 0; i <= m + 1; i++)
+                    a[i] = a[i] + h[i] * hh;
+                for (j = 1; j <= m; j++)
+                {
+                    ii = m - j + 1; d = x[ix[ii - 1]];
+                    y2 = a[ii - 1];
+                    for (k = m1 - j; k <= m + 1; k++)
+                    {
+                        y1 = a[k - 1]; a[ii - 1] = y2 - d * y1;
+                        y2 = y1; ii = k;
+                    }
+                }
+                hm = Math.Abs(hh);
+                if (hm <= ha) { a[m + 1] = -hm; return; }
+                a[m + 1] = hm; ha = hm; im = ix[0]; h1 = hh;
+                j = 0;
+                for (i = 0; i <= n - 1; i++)
+                {
+                    if (i == ix[j])
+                    { if (j < m + 1) j = j + 1; }
+                    else
+                    {
+                        h2 = a[m];
+                        for (k = m - 1; k >= 0; k--)
+                            h2 = h2 * x[i] + a[k];
+                        h2 = h2 - y[i];
+                        if (Math.Abs(h2) > hm)
+                        { hm = Math.Abs(h2); h1 = h2; im = i; }
+                    }
+                }
+                if (im == ix[0]) return;
+                i = 0; l = 1;
+                while (l == 1)
+                {
+                    l = 0;
+                    if (im >= ix[i])
+                    {
+                        i = i + 1;
+                        if (i <= m + 1) l = 1;
+                    }
+                }
+                if (i > m + 1) i = m + 1;
+                if (i == (i / 2) * 2) h2 = -hh;
+                else h2 = hh;
+                if (h1 * h2 >= 0.0) ix[i] = im;
+                else
+                {
+                    if (im < ix[0])
+                    {
+                        for (j = m; j >= 0; j--)
+                            ix[j + 1] = ix[j];
+                        ix[0] = im;
+                    }
+                    else
+                    {
+                        if (im > ix[m + 1])
+                        {
+                            for (j = 1; j <= m + 1; j++)
+                                ix[j - 1] = ix[j];
+                            ix[m + 1] = im;
+                        }
+                        else ix[i - 1] = im;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 用里米兹 (Remez) 方法求给定函数的最佳一致逼近多项式。
+        /// </summary>
+        /// <param name="a">区间左端点值</param>
+        /// <param name="b">区间右端点值</param>
+        /// <param name="p">前 n 个元素返回 n-1 次最佳一致逼近多项式 Pn-1(x) 的 n 个系数；
+        /// 最后一个元素 p[n] 返回 Pn-1(x) 的偏差绝对值µ</param>
+        /// <param name="n">n-1 次最佳一致逼近多项式的项数，即最佳一致逼近多项式的最高次为 n-1 。
+        /// 要求 n≤20 。若 n>20 , 则本函数自动取 n = 20</param>
+        /// <param name="eps">控制精度要求，一般在 10^(-10) ~ 10^(-35)之间</param>
+        /// <param name="func">指向计算函数值 f(x) 的函数</param>
+        public static void REMZ(double a, double b, out double[] p, int n, double eps, Func<double, double> func)
+        {
+            int i, j, k, m, nn;
+            double[] x = new double[21], g = new double[21];
+            double d, t, u, s, xx, x0, h, yy;
+            p = new double[n + 1];
+
+            if (n > 19) n = 19;
+            nn = n + 1;
+            m = nn + 1; d = 1.0e+35;
+            for (k = 0; k <= nn; k++)
+            {
+                t = Math.Cos((nn - k) * 3.1415926 / (1.0 * nn));
+                x[k] = (b + a + (b - a) * t) / 2.0;
+            }
+            while (1 == 1)
+            {
+                u = 1.0;
+                for (i = 0; i <= m - 1; i++)
+                {
+                    p[i] = func(x[i]);
+                    g[i] = -u; u = -u;
+                }
+                for (j = 0; j <= nn - 1; j++)
+                {
+                    k = m; s = p[k - 1]; xx = g[k - 1];
+                    for (i = j; i <= nn - 1; i++)
+                    {
+                        t = p[nn - i + j - 1]; x0 = g[nn - i + j - 1];
+                        p[k - 1] = (s - t) / (x[k - 1] - x[m - i - 2]);
+                        g[k - 1] = (xx - x0) / (x[k - 1] - x[m - i - 2]);
+                        k = nn - i + j; s = t; xx = x0;
+                    }
+                }
+                u = -p[m - 1] / g[m - 1];
+                for (i = 0; i <= m - 1; i++)
+                    p[i] = p[i] + g[i] * u;
+                for (j = 1; j <= nn - 1; j++)
+                {
+                    k = nn - j; h = x[k - 1]; s = p[k - 1];
+                    for (i = m - j; i <= nn; i++)
+                    {
+                        t = p[i - 1]; p[k - 1] = s - h * t;
+                        s = t; k = i;
+                    }
+                }
+                p[m - 1] = Math.Abs(u); u = p[m - 1];
+                if (Math.Abs(u - d) <= eps) return;
+                d = u; h = 0.1 * (b - a) / (1.0 * nn);
+                xx = a; x0 = a;
+                while (x0 <= b)
+                {
+                    s = func(x0); t = p[nn - 1];
+                    for (i = nn - 2; i >= 0; i--)
+                        t = t * x0 + p[i];
+                    s = Math.Abs(s - t);
+                    if (s > u) { u = s; xx = x0; }
+                    x0 = x0 + h;
+                }
+                s = func(xx); t = p[nn - 1];
+                for (i = nn - 2; i >= 0; i--) t = t * xx + p[i];
+                yy = s - t; i = 1; j = nn + 1;
+                while ((j - i) != 1)
+                {
+                    k = (i + j) / 2;
+                    if (xx < x[k - 1]) j = k;
+                    else i = k;
+                }
+                if (xx < x[0])
+                {
+                    s = func(x[0]); t = p[nn - 1];
+                    for (k = nn - 2; k >= 0; k--) t = t * x[0] + p[k];
+                    s = s - t;
+                    if (s * yy > 0.0) x[0] = xx;
+                    else
+                    {
+                        for (k = nn - 1; k >= 0; k--) x[k + 1] = x[k];
+                        x[0] = xx;
+                    }
+                }
+                else
+                {
+                    if (xx > x[nn])
+                    {
+                        s = func(x[nn]); t = p[nn - 1];
+                        for (k = nn - 2; k >= 0; k--) t = t * x[nn] + p[k];
+                        s = s - t;
+                        if (s * yy > 0.0) x[nn] = xx;
+                        else
+                        {
+                            for (k = 0; k <= nn - 1; k++) x[k] = x[k + 1];
+                            x[nn] = xx;
+                        }
+                    }
+                    else
+                    {
+                        i = i - 1; j = j - 1;
+                        s = func(x[i]); t = p[nn - 1];
+                        for (k = nn - 2; k >= 0; k--) t = t * x[i] + p[k];
+                        s = s - t;
+                        if (s * yy > 0.0) x[i] = xx;
+                        else x[j] = xx;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 用最小二乘法求矩形域上 n×m 个数据点的拟合曲面
+        /// </summary>
+        /// <param name="x">存放给定数据点的n个X坐标</param>
+        /// <param name="y">存放给定数据点的m个Y坐标</param>
+        /// <param name="z">存放矩形区域内 n×m 个网点上的函数值</param>
+        /// <param name="n">X 坐标个数</param>
+        /// <param name="m">Y 坐标个数</param>
+        /// <param name="a">返回二元拟合多项式 f(x,y)=ΣΣa(x-x)^i(y-y)^j 的各系数</param>
+        /// <param name="p">拟合多项式中 x 的最高次数加1。要求 p≤n 且 p≤20 ，若不满足这个条件，本函数自动取 p=min{n, 20}</param>
+        /// <param name="q">拟合多项式中 y 的最高次数加1。要求 q≤m 且 q≤20 ，若不满足这个条件，本函数自动取 q=min{m, 20}</param>
+        /// <param name="dt">dt[0] 返回拟合多项式与数据点误差的平方和，dt[1]返回拟合多项式与数据
+        /// 点误差的绝对值之和，dt[2]返回拟合多项式与数据点误差绝对值的最大值</param>
+        public static void PIR2(double[] x, double[] y, double[,] z, int n, int m, out double[,] a, int p, int q, out double[] dt)
+        {
+            int i, j, k, l, kk;
+            double[] apx = new double[20], apy = new double[20], bx = new double[20], by = new double[20];
+            double[,] u = new double[20, 20];
+            double[] t = new double[20], t1 = new double[20], t2 = new double[20]; double xx, yy, d1, d2, g = 0, g1, g2;
+            double x2, dd, y1, x1;
+
+            double[,] v = new double[20, m];
+
+            a = new double[p, q];
+            dt = new double[3];
+
+            for (i = 0; i < p; i++)
+                for (j = 0; j < q; j++) a[i, j] = 0.0;
+            if (p > n) p = n;
+            if (p > 20) p = 20;
+            if (q > m) q = m ;
+            if (q > 20) q = 20;
+            xx = 0.0;
+            for (i = 0; i <= n - 1; i++)
+                xx = xx + x[i] / (1.0 * n);
+            yy = 0.0;
+            for (i = 0; i <= m - 1; i++)
+                yy = yy + y[i] / (1.0 * m);
+            d1 = 1.0 * n; apx[0] = 0.0;
+            for (i = 0; i <= n - 1; i++)
+                apx[0] = apx[0] + x[i] - xx;
+            apx[0] = apx[0] / d1;
+            for (j = 0; j <= m - 1; j++)
+            {
+                v[0, j] = 0.0;
+                for (i = 0; i <= n - 1; i++)
+                    v[0, j] = v[0, j] + z[i, j];
+                v[0, j] = v[0, j] / d1;
+            }
+            if (p > 1)
+            {
+                d2 = 0.0; apx[1] = 0.0;
+                for (i = 0; i <= n - 1; i++)
+                {
+                    g = x[i] - xx - apx[0];
+                    d2 = d2 + g * g;
+                    apx[1] = apx[1] + (x[i] - xx) * g * g;
+                }
+                apx[1] = apx[1] / d2;
+                bx[1] = d2 / d1;
+                for (j = 0; j <= m - 1; j++)
+                {
+                    v[1, j] = 0.0;
+                    for (i = 0; i <= n - 1; i++)
+                    {
+                        g = x[i] - xx - apx[0];
+                        v[1, j] = v[1, j] + z[i, j] * g;
+                    }
+                    v[1, j] = v[1, j] / d2;
+                }
+                d1 = d2;
+            }
+            for (k = 2; k <= p-1; k++)
+            {
+                d2 = 0.0; apx[k] = 0.0;
+                for (j = 0; j <= m - 1; j++) v[k, j] = 0.0;
+                for (i = 0; i <= n - 1; i++)
+                {
+                    g1 = 1.0; g2 = x[i] - xx - apx[0];
+                    for (j = 2; j <= k; j++)
+                    {
+                        g = (x[i] - xx - apx[j - 1]) * g2 - bx[j - 1] * g1;
+                        g1 = g2; g2 = g;
+                    }
+                    d2 = d2 + g * g;
+                    apx[k] = apx[k] + (x[i] - xx) * g * g;
+                    for (j = 0; j <= m - 1; j++)
+                        v[k, j] = v[k, j] + z[i, j] * g;
+                }
+                for (j = 0; j <= m - 1; j++)
+                    v[k, j] = v[k, j] / d2;
+                apx[k] = apx[k] / d2;
+                bx[k] = d2 / d1;
+                d1 = d2;
+            }
+            d1 = m; apy[0] = 0.0;
+            for (i = 0; i <= m - 1; i++)
+                apy[0] = apy[0] + y[i] - yy;
+            apy[0] = apy[0] / d1;
+            for (j = 0; j <= p-1; j++)
+            {
+                u[j, 0] = 0.0;
+                for (i = 0; i <= m - 1; i++)
+                    u[j, 0] = u[j, 0] + v[j, i];
+                u[j, 0] = u[j, 0] / d1;
+            }
+            if (q > 1)
+            {
+                d2 = 0.0; apy[1] = 0.0;
+                for (i = 0; i <= m - 1; i++)
+                {
+                    g = y[i] - yy - apy[0];
+                    d2 = d2 + g * g;
+                    apy[1] = apy[1] + (y[i] - yy) * g * g;
+                }
+                apy[1] = apy[1] / d2;
+                by[1] = d2 / d1;
+                for (j = 0; j <= p-1; j++)
+                {
+                    u[j, 1] = 0.0;
+                    for (i = 0; i <= m - 1; i++)
+                    {
+                        g = y[i] - yy - apy[0];
+                        u[j, 1] = u[j, 1] + v[j, i] * g;
+                    }
+                    u[j, 1] = u[j, 1] / d2;
+                }
+                d1 = d2;
+            }
+            for (k = 2; k <= q-1; k++)
+            {
+                d2 = 0.0; apy[k] = 0.0;
+                for (j = 0; j <= p-1; j++) u[j, k] = 0.0;
+                for (i = 0; i <= m - 1; i++)
+                {
+                    g1 = 1.0;
+                    g2 = y[i] - yy - apy[0];
+                    for (j = 2; j <= k; j++)
+                    {
+                        g = (y[i] - yy - apy[j - 1]) * g2 - by[j - 1] * g1;
+                        g1 = g2; g2 = g;
+                    }
+                    d2 = d2 + g * g;
+                    apy[k] = apy[k] + (y[i] - yy) * g * g;
+                    for (j = 0; j <= p-1; j++)
+                        u[j, k] = u[j, k] + v[j, i] * g;
+                }
+                for (j = 0; j <= p-1; j++)
+                    u[j, k] = u[j, k] / d2;
+                apy[k] = apy[k] / d2;
+                by[k] = d2 / d1;
+                d1 = d2;
+            }
+            v[0, 0] = 1.0; v[1, 0] = -apy[0]; v[1, 1] = 1.0;
+            for (i = 0; i <= p-1; i++)
+                for (j = 0; j <= q-1; j++)
+                    a[i, j] = 0.0;
+            for (i = 2; i <= q-1; i++)
+            {
+                v[i, i] = v[i - 1, i - 1];
+                v[i, i - 1] = -apy[i - 1] * v[i - 1, i - 1] + v[i - 1, i - 2];
+                if (i >= 3)
+                    for (k = i - 2; k >= 1; k--)
+                        v[i, k] = -apy[i - 1] * v[i - 1, k] +
+                                v[i - 1, k - 1] - by[i - 1] * v[i - 2, k];
+                v[i, 0] = -apy[i - 1] * v[i - 1, 0] - by[i - 1] * v[i - 2, 0];
+            }
+            for (i = 0; i <= p-1; i++)
+            {
+                if (i == 0) { t[0] = 1.0; t1[0] = 1.0; }
+                else
+                {
+                    if (i == 1)
+                    {
+                        t[0] = -apx[0]; t[1] = 1.0;
+                        t2[0] = t[0]; t2[1] = t[1];
+                    }
+                    else
+                    {
+                        t[i] = t2[i - 1];
+                        t[i - 1] = -apx[i - 1] * t2[i - 1] + t2[i - 2];
+                        if (i >= 3)
+                            for (k = i - 2; k >= 1; k--)
+                                t[k] = -apx[i - 1] * t2[k] + t2[k - 1]
+                                     - bx[i - 1] * t1[k];
+                        t[0] = -apx[i - 1] * t2[0] - bx[i - 1] * t1[0];
+                        t2[i] = t[i];
+                        for (k = i - 1; k >= 0; k--)
+                        { t1[k] = t2[k]; t2[k] = t[k]; }
+                    }
+                }
+                for (j = 0; j <= q-1; j++)
+                    for (k = i; k >= 0; k--)
+                        for (l = j; l >= 0; l--)
+                            a[k, l] = a[k, l] + u[i, j] * t[k] * v[j, l];
+            }
+            dt[0] = 0.0; dt[1] = 0.0; dt[2] = 0.0;
+            for (i = 0; i <= n - 1; i++)
+            {
+                x1 = x[i] - xx;
+                for (j = 0; j <= m - 1; j++)
+                {
+                    y1 = y[j] - yy;
+                    x2 = 1.0; dd = 0.0;
+                    for (k = 0; k <= p-1; k++)
+                    {
+                        g = a[k, q-1];
+                        for (kk = q - 2; kk >= 0; kk--)
+                            g = g * y1 + a[k, kk];
+                        g = g * x2; dd = dd + g; x2 = x2 * x1;
+                    }
+                    dd = dd - z[i, j];
+                    if (Math.Abs(dd) > dt[2]) dt[2] = Math.Abs(dd);
+                    dt[0] = dt[0] + dd * dd;
+                    dt[1] = dt[1] + Math.Abs(dd);
+                }
+            }
+        }
     }
 }

@@ -72,6 +72,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="InterpolationApproximation\PIR2.cs" />
+    <Compile Include="InterpolationApproximation\SLGQ.cs" />
+    <Compile Include="InterpolationApproximation\SLQ3.cs" />
     <Compile Include="InterpolationApproximation\SPL3.cs" />
     <Compile Include="InterpolationApproximation\SPL1.cs" />
     <Compile Include="InterpolationApproximation\SPL.cs" />

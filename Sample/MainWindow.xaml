@@ -28,6 +28,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <TextBlock x:Name="TbResult" Grid.Column="1" Margin="5" Padding="5" Background="White"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Column="1" >
+        <TextBlock x:Name="TbResult" Margin="5" Padding="5" Background="White"/>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -448,7 +448,7 @@ namespace Heroius.XuAlgrithms
                 ddy[j] = 6.0 * (y[j + 1] - y[j]) / h1 - 2.0 * (2.0 * dy[j] + dy[j + 1]) / s[j];
             }
             h1 = s[n - 2] * s[n - 2];
-            ddy[n - 1] = 6.0* (y[n - 2] - y[n - 1]) / h1 + 2.0* (2.0* dy[n - 1] + dy[n - 2]) / s[n - 2]; //origin code .* err
+            ddy[n - 1] = 6.0 * (y[n - 2] - y[n - 1]) / h1 + 2.0 * (2.0 * dy[n - 1] + dy[n - 2]) / s[n - 2]; //origin code .* err
             integ = 0.0;
             for (i = 0; i <= n - 2; i++)
             {
@@ -483,5 +483,206 @@ namespace Heroius.XuAlgrithms
             }
             return integ;
         }
+
+        /// <summary>
+        /// 给定n个结点Xi(i=0,1,...,n—1)上的函数值Yi=f(Xi)以及两端点上的二阶导数值Y''0=f''(X0)与Y''n-1=f''(Xn-1)，
+        /// 利用三次样条函数计算各结点上的数值导数以及插值区间[X0,Xn-1]上的积分近似值s=∫f(x)dx，
+        /// 并对函数f(x)进行成组插值与成组微商。
+        /// </summary>
+        /// <param name="x">存放给定n个结点的值</param>
+        /// <param name="y">存放n个给定结点上的函数值</param>
+        /// <param name="n">给定结点的个数</param>
+        /// <param name="dy">返回n个给定结点处的一阶导数值Y'k(k=0,...,n-1)</param>
+        /// <param name="ddy">ddy[0]存放Y''0, ddy[n-1]存放Y''n-1。
+        /// 返回n个给定节点处的二阶导数值Y''k(k=0,...,n-1)</param>
+        /// <param name="t">存放m个指定插值点的值，要求X0<t(j)<Xn-1(j=0,...,m-1)</param>
+        /// <param name="m">指定插值点的个数</param>
+        /// <param name="z">返回m个指定插值点处的函数值</param>
+        /// <param name="dz">返回m个指定插值点处的一阶导数值</param>
+        /// <param name="ddz">返回m个指定插值点处的二阶导数值</param>
+        /// <returns>返回积分值s=∫f(x)dx</returns>
+        public static double SPL2(double[] x, double[] y, int n, out double[] dy, ref double[] ddy, double[] t, int m, out double[] z, out double[] dz, out double[] ddz)
+        {
+            dy = new double[n];
+            z = new double[m];
+            dz = new double[m];
+            ddz = new double[m];
+
+            int i, j;
+            double h0, h1 = 0, alpha, beta, integ;
+
+            double[] s = new double[n];
+
+            dy[0] = -0.5;
+            h0 = x[1] - x[0];
+            s[0] = 3.0 * (y[1] - y[0]) / (2.0 * h0) - ddy[0] * h0 / 4.0;
+            for (j = 1; j <= n - 2; j++)
+            {
+                h1 = x[j + 1] - x[j];
+                alpha = h0 / (h0 + h1);
+                beta = (1.0 - alpha) * (y[j] - y[j - 1]) / h0;
+                beta = 3.0 * (beta + alpha * (y[j + 1] - y[j]) / h1);
+                dy[j] = -alpha / (2.0 + (1.0 - alpha) * dy[j - 1]);
+                s[j] = (beta - (1.0 - alpha) * s[j - 1]);
+                s[j] = s[j] / (2.0 + (1.0 - alpha) * dy[j - 1]);
+                h0 = h1;
+            }
+            dy[n - 1] = (3.0 * (y[n - 1] - y[n - 2]) / h1 + ddy[n - 1] * h1 /
+                  2.0 - s[n - 2]) / (2.0 + dy[n - 2]);
+            for (j = n - 2; j >= 0; j--)
+                dy[j] = dy[j] * dy[j + 1] + s[j];
+            for (j = 0; j <= n - 2; j++) s[j] = x[j + 1] - x[j];
+            for (j = 0; j <= n - 2; j++)
+            {
+                h1 = s[j] * s[j];
+                ddy[j] = 6.0 * (y[j + 1] - y[j]) / h1 - 2.0 * (2.0 * dy[j] + dy[j + 1]) / s[j];
+            }
+            h1 = s[n - 2] * s[n - 2];
+            ddy[n - 1] = 6.0 * (y[n - 2] - y[n - 1]) / h1 + 2.0 * (2.0 * dy[n - 1] + dy[n - 2]) / s[n - 2];
+            integ = 0.0;
+            for (i = 0; i <= n - 2; i++)
+            {
+                h1 = 0.5 * s[i] * (y[i] + y[i + 1]);
+                h1 = h1 - s[i] * s[i] * s[i] * (ddy[i] + ddy[i + 1]) / 24.0;
+                integ = integ + h1;
+            }
+            for (j = 0; j <= m - 1; j++)
+            {
+                if (t[j] >= x[n - 1]) i = n - 2;
+                else
+                {
+                    i = 0;
+                    while (t[j] > x[i + 1]) i = i + 1;
+                }
+                h1 = (x[i + 1] - t[j]) / s[i];
+                h0 = h1 * h1;
+                z[j] = (3.0 * h0 - 2.0 * h0 * h1) * y[i];
+                z[j] = z[j] + s[i] * (h0 - h0 * h1) * dy[i];
+                dz[j] = 6.0 * (h0 - h1) * y[i] / s[i];
+                dz[j] = dz[j] + (3.0 * h0 - 2.0 * h1) * dy[i];
+                ddz[j] = (6.0 - 12.0 * h1) * y[i] / (s[i] * s[i]);
+                ddz[j] = ddz[j] + (2.0 - 6.0 * h1) * dy[i] / s[i];
+                h1 = (t[j] - x[i]) / s[i];
+                h0 = h1 * h1;
+                z[j] = z[j] + (3.0 * h0 - 2.0 * h0 * h1) * y[i + 1];
+                z[j] = z[j] - s[i] * (h0 - h0 * h1) * dy[i + 1];
+                dz[j] = dz[j] - 6.0 * (h0 - h1) * y[i + 1] / s[i];
+                dz[j] = dz[j] + (3.0 * h0 - 2.0 * h1) * dy[i + 1];
+                ddz[j] = ddz[j] + (6.0 - 12.0 * h1) * y[i + 1] / (s[i] * s[i]);
+                ddz[j] = ddz[j] - (2.0 - 6.0 * h1) * dy[i + 1] / s[i];
+            }
+            return integ;
+        }
+
+        /// <summary>
+        /// 给定n个结点Xi(i=0,1,...,n—1)上的函数值Yi=f(Xi)以及
+        /// 第三种边界条件，
+        /// 利用三次样条函数计算各结点上的数值导数以及插值区间[X0,Xn-1]上的积分近似值s=∫f(x)dx，
+        /// 并对函数f(x)进行成组插值与成组微商。
+        /// </summary>
+        /// <param name="x">存放给定n个结点的值</param>
+        /// <param name="y">存放n个给定结点上的函数值，要求Y0=Yn-1</param>
+        /// <param name="n">给定结点的个数</param>
+        /// <param name="dy">返回n个给定结点处的一阶导数值Y'k(k=0,...,n-1)</param>
+        /// <param name="ddy">返回n个给定结点处的二阶导数值Y''k(k=0,...,n-1)</param>
+        /// <param name="t">存放m个指定插值点的值，要求X0<t(j)<Xn-1(j=0,...,m-1)</param>
+        /// <param name="m">指定插值点的个数</param>
+        /// <param name="z">返回m个指定插值点处的函数值</param>
+        /// <param name="dz">返回m个指定插值点处的一阶导数值</param>
+        /// <param name="ddz">返回m个指定插值点处的二阶导数值</param>
+        /// <returns>返回积分值s=∫f(x)dx</returns>
+        public static double SPL3(double[] x, double[] y, int n, out double[] dy, out double[] ddy, double[] t, int m, out double[] z, out double[] dz, out double[] ddz)
+        {
+            dy = new double[n];
+            ddy = new double[n];
+            z = new double[m];
+            dz = new double[m];
+            ddz = new double[m];
+
+            int i, j;
+            double 
+                h0 = x[n - 1] - x[n - 2], 
+                y0 = y[n - 1] - y[n - 2], 
+                h1, 
+                y1, alpha = 0, beta = 0, u, g;
+
+            double[] s = new double[n];
+
+            dy[0] = 0;
+            ddy[0] = 0.0;
+            ddy[n - 1] = 0.0;
+            s[0] = 1.0;
+            s[n - 1] = 1.0;
+            for (j = 1; j <= n - 1; j++)
+            {
+                h1 = h0;
+                y1 = y0;
+                h0 = x[j] - x[j - 1];
+                y0 = y[j] - y[j - 1];
+                alpha = h1 / (h1 + h0);
+                beta = 3.0 * ((1.0 - alpha) * y1 / h1 + alpha * y0 / h0);
+                if (j < n - 1)
+                {
+                    u = 2.0 + (1.0 - alpha) * dy[j - 1];
+                    dy[j] = -alpha / u;
+                    s[j] = (alpha - 1.0) * s[j - 1] / u;
+                    ddy[j] = (beta - (1.0 - alpha) * ddy[j - 1]) / u;
+                }
+            }
+            for (j = n - 2; j >= 1; j--)
+            {
+                s[j] = dy[j] * s[j + 1] + s[j];
+                ddy[j] = dy[j] * ddy[j + 1] + ddy[j];
+            }
+            dy[n - 2] = (beta - alpha * ddy[1] - (1.0 - alpha) * ddy[n - 2]) / 
+                (alpha * s[1] + (1.0 - alpha) * s[n - 2] + 2.0);
+            for (j = 2; j <= n - 1; j++)
+                dy[j - 2] = s[j - 1] * dy[n - 2] + ddy[j - 1];
+            dy[n - 1] = dy[0];
+            for (j = 0; j <= n - 2; j++) s[j] = x[j + 1] - x[j];
+            for (j = 0; j <= n - 2; j++)
+            {
+                h1 = s[j] * s[j];
+                ddy[j] = 6.0 * (y[j + 1] - y[j]) / h1 - 2.0 * (2.0 * dy[j] + dy[j + 1]) / s[j];
+            }
+            h1 = s[n - 2] * s[n - 2];
+            ddy[n - 1] = 6.0 * (y[n - 2] - y[n - 1]) / h1 + 2.0 * (2.0 * dy[n - 1] + dy[n - 2]) / s[n - 2];
+            g = 0.0;
+            for (i = 0; i <= n - 2; i++)
+            {
+                h1 = 0.5 * s[i] * (y[i] + y[i + 1]);
+                h1 = h1 - s[i] * s[i] * s[i] * (ddy[i] + ddy[i + 1]) / 24.0;
+                g = g + h1;
+            } //g suppose to be 5.07754e-15
+            for (j = 0; j <= m - 1; j++)
+            {
+                h0 = t[j];
+                while (h0 >= x[n - 1]) h0 = h0 - (x[n - 1] - x[0]);
+                while (h0 < x[0]) h0 = h0 + (x[n - 1] - x[0]);
+                i = 0;
+                while (h0 > x[i + 1]) i++;
+                u = h0;
+                h1 = (x[i + 1] - u) / s[i];
+                h0 = h1 * h1;
+                z[j] = (3.0 * h0 - 2.0 * h0 * h1) * y[i];
+                z[j] = z[j] + s[i] * (h0 - h0 * h1) * dy[i];
+                dz[j] = 6.0 * (h0 - h1) * y[i] / s[i];
+                dz[j] = dz[j] + (3.0 * h0 - 2.0 * h1) * dy[i];
+                ddz[j] = (6.0 - 12.0 * h1) * y[i] / (s[i] * s[i]);
+                ddz[j] = ddz[j] + (2.0 - 6.0 * h1) * dy[i] / s[i];
+                h1 = (u - x[i]) / s[i];
+                h0 = h1 * h1;
+                z[j] = z[j] + (3.0 * h0 - 2.0 * h0 * h1) * y[i + 1];
+                z[j] = z[j] - s[i] * (h0 - h0 * h1) * dy[i + 1];
+                dz[j] = dz[j] - 6.0 * (h0 - h1) * y[i + 1] / s[i];
+                dz[j] = dz[j] + (3.0 * h0 - 2.0 * h1) * dy[i + 1];
+                ddz[j] = ddz[j] + (6.0 - 12.0 * h1) * y[i + 1] / (s[i] * s[i]);
+                ddz[j] = ddz[j] - (2.0 - 6.0 * h1) * dy[i + 1] / s[i];
+            }
+            return g;
+        }
+
+
+
     }
 }

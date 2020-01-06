@@ -88,6 +88,7 @@
     <Compile Include="NonlinearEquations\ATKN.cs" />
     <Compile Include="NonlinearEquations\DHRT.cs" />
     <Compile Include="NonlinearEquations\NEWT.cs" />
+    <Compile Include="ODEs\ELR1.cs" />
     <Compile Include="SampleItem.cs" />
     <Compile Include="MatrixEigen\SSTQ.cs" />
     <Compile Include="Matrix\CHOL.cs" />

@@ -201,8 +201,8 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "PQG2", "计算二重积分的连分式法" ),
                 new Tuple<string, string>( "MTML", "计算多重积分的蒙特卡罗法" )}),
             new Tuple<string, string, Tuple<string, string>[]>("ODEs", "常微分方程组的求解", new Tuple<string, string>[] {
-                new Tuple<string, string>( "ELR1", "全区间积分的定步长欧拉方法" )})/*,
-                new Tuple<string, string>( "ELR2", "积分一步的变步长欧拉方法" ),
+                new Tuple<string, string>( "ELR1", "全区间积分的定步长欧拉方法" ),
+                new Tuple<string, string>( "ELR2", "积分一步的变步长欧拉方法" )})/*,
                 new Tuple<string, string>( "WITY", "全区间积分的维梯方法" ),
                 new Tuple<string, string>( "RKT1", "全区间积分的定步长龙格-库塔方法" ),
                 new Tuple<string, string>( "RKT2", "积分一步的变步长龙格-库塔方法" ),

@@ -281,8 +281,8 @@ namespace Heroius.XuAlgrithms
         /// </param>
         public static void GIL(double t, double h, ref double[] y, int n, double eps, ref double[] q, Func<double, double[], int, double[]> func)
         {
-            int j, k, m=1, ii;
-            double x = t, p = 1+eps, hh=h, r, s, t0, dt, qq;
+            int j, k, m = 1, ii;
+            double x = t, p = 1 + eps, hh = h, r, s, t0, dt, qq;
             double[]
                 a = new double[4] { 0.5, 0.29289321881, 1.7071067812, 0.166666667 },
                 b = new double[4] { 2.0, 1.0, 1.0, 2.0 },
@@ -292,44 +292,141 @@ namespace Heroius.XuAlgrithms
                 u = new double[n],
                 v = new double[n],
                 g = new double[n];
-                for (j = 0; j <= n - 1; j++) u[j] = y[j];
+            for (j = 0; j <= n - 1; j++) u[j] = y[j];
+            while (p >= eps)
+            {
+                for (j = 0; j <= n - 1; j++)
+                { v[j] = y[j]; y[j] = u[j]; g[j] = q[j]; }
+                dt = h / m; t = x;
+                for (k = 0; k <= m - 1; k++)
+                {
+                    d = func(t, y, n);
+                    for (ii = 0; ii <= 3; ii++)
+                    {
+                        for (j = 0; j <= n - 1; j++) d[j] = d[j] * hh;
+                        for (j = 0; j <= n - 1; j++)
+                        {
+                            r = (a[ii] * (d[j] - b[ii] * g[j]) + y[j]) - y[j];
+                            y[j] = y[j] + r;
+                            s = g[j] + 3.0 * r;
+                            g[j] = s - c[ii] * d[j];
+                        }
+                        t0 = t + e[ii] * hh;
+                        d = func(t0, y, n);
+                    }
+                    t = t + dt;
+                }
+                p = 0.0;
+                for (j = 0; j <= n - 1; j++)
+                {
+                    qq = Math.Abs(y[j] - v[j]);
+                    if (qq > p) p = qq;
+                }
+                hh = hh / 2.0; m = m + m;
+            }
+            for (j = 0; j <= n - 1; j++)
+            {
+                q[j] = g[j];
+            }
+        }
+
+        /// <summary>
+        /// 用变步长默森（Merson）方法对一阶微分方程组进行全区间积分
+        /// </summary>
+        /// <param name="t">对微分方程进行积分的起始点t0</param>
+        /// <param name="h">积分的步长</param>
+        /// <param name="n">微分方程组中方程个数，也是未知函数的个数</param>
+        /// <param name="y">存放 n 个未知函数在起始点 t 处的函数值 Yj(t) (j=0,1,...,n—1)</param>
+        /// <param name="eps">积分的精度要求</param>
+        /// <param name="k">积分步数（包括起始点这一步）</param>
+        /// <param name="z">z[n,k]返回k个积分点（包括起始点）的未知函数值</param>
+        /// <param name="func">指向计算微分方程组中各方程右端函数值的函数名
+        /// <para>第1参数：积分起点</para>
+        /// <para>第2参数：未知函数在起始点处的函数值</para>
+        /// <para>第3参数：方程数</para>
+        /// <para>返回值：右端函数值</para></param>
+        public static void MRSN(double t, double h, int n, double[] y, double eps, int k, out double[,] z, Func<double, double[], int, double[]> func)
+        {
+            int i, j, m, nn;
+            double aa = t, bb, x, hh, p, dt, t0, qq;
+            double[] d,
+                a = new double[n],
+                b = new double[n],
+                c = new double[n],
+                u = new double[n],
+                v = new double[n],
+                zz = new double[n * k];
+            for (i = 0; i < n; i++) zz[i * k] = y[i];
+            for (i = 1; i < k; i++)
+            {
+                x = aa + (i - 1) * h;
+                nn = 1;
+                hh = h;
+                for (j = 0; j < n; j++) u[j] = y[j];
+                p = 1.0 + eps;
                 while (p >= eps)
                 {
-                    for (j = 0; j <= n - 1; j++)
-                    { v[j] = y[j]; y[j] = u[j]; g[j] = q[j]; }
-                    dt = h / m; t = x;
-                    for (k = 0; k <= m - 1; k++)
+                    for (j = 0; j < n; j++)
+                    {
+                        v[j] = y[j];
+                        y[j] = u[j];
+                    }
+                    dt = h / nn;
+                    t = x;
+                    for (m = 0; m < nn; m++)
                     {
                         d = func(t, y, n);
-                        for (ii = 0; ii <= 3; ii++)
+                        for (j = 0; j < n; j++)
                         {
-                            for (j = 0; j <= n - 1; j++) d[j] = d[j] * hh;
-                            for (j = 0; j <= n - 1; j++)
-                            {
-                                r = (a[ii] * (d[j] - b[ii] * g[j]) + y[j]) - y[j];
-                                y[j] = y[j] + r;
-                                s = g[j] + 3.0 * r;
-                                g[j] = s - c[ii] * d[j];
-                            }
-                            t0 = t + e[ii] * hh;
-                            d = func(t0, y, n);
+                            a[j] = d[j];
+                            y[j] = y[j] + hh * d[j] / 3.0;
+                        }
+                        t0 = t + hh / 3.0;
+                        d = func(t0, y, n);
+                        for (j = 0; j < n; j++)
+                        {
+                            b[j] = d[j];
+                            y[j] = y[j] + hh * (d[j] - a[j]) / 6.0;
+                        }
+                        d = func(t0, y, n);
+                        for (j = 0; j < n; j++)
+                        {
+                            b[j] = d[j];
+                            bb = (d[j] - 4.0 * (b[j] + a[j] / 4.0) / 9.0) / 8.0;
+                            y[j] = y[j] + 3.0 * hh * bb;
+                        }
+                        t0 = t + hh / 2.0;
+                        d = func(t0, y, n);
+                        for (j = 0; j < n; j++)
+                        {
+                            c[j] = d[j];
+                            qq = d[j] - 15.0 * (b[j] - a[j] / 5.0) / 16.0;
+                            y[j] = y[j] + 2.0 * hh * qq;
+                        }
+                        t0 = t + hh;
+                        d = func(t0, y, n);
+                        for (j = 0; j < n; j++)
+                        {
+                            qq = c[j] - 9.0 * (b[j] - 2.0 * a[j] / 9.0) / 8.0;
+                            qq = d[j] - 8.0 * qq;
+                            y[j] = y[j] + hh * qq / 6.0;
                         }
                         t = t + dt;
                     }
                     p = 0.0;
-                    for (j = 0; j <= n - 1; j++)
+                    for (j = 0; j < n; j++)
                     {
                         qq = Math.Abs(y[j] - v[j]);
                         if (qq > p) p = qq;
                     }
-                    hh = hh / 2.0; m = m + m;
+                    hh = hh / 2.0;
+                    nn++;
                 }
-                for (j = 0; j <= n - 1; j++)
-                {
-                    q[j] = g[j];
-                }
+                for (j = 0; j < n; j++) zz[j * k + i] = y[j];
+            }
+            z = Utility.C.Convert(zz, n, k);
         }
-
+        //todo: MRSN 示例计算结果与书中差距较大
 
 
     }

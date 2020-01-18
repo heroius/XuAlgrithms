@@ -653,7 +653,7 @@ namespace Heroius.XuAlgrithms
                 h1 = 0.5 * s[i] * (y[i] + y[i + 1]);
                 h1 = h1 - s[i] * s[i] * s[i] * (ddy[i] + ddy[i + 1]) / 24.0;
                 g = g + h1;
-            } //g suppose to be 5.07754e-15
+            } //todo: SPL3: g suppose to be 5.07754e-15
             for (j = 0; j <= m - 1; j++)
             {
                 h0 = t[j];

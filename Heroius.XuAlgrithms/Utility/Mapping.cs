@@ -177,7 +177,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "SPL", "光滑插值" ),
                 new Tuple<string, string>( "SPL1", "第一种边界条件的三次样条函数插值、微商与积分" ),
                 new Tuple<string, string>( "SPL2", "第二种边界条件的三次样条函数插值、微商与积分" ),
-                new Tuple<string, string>( "SPL3", "第三种边界条件的三次样条函数插值、微商与积分" ),
+                new Tuple<string, string>( "SPL3", "第三种边界条件的三次样条函数插值、微商与积分" ),//示例结果不一致
                 new Tuple<string, string>( "SLQ3", "二元三点插值" ),
                 new Tuple<string, string>( "SLGQ", "二元全区间插值" ),
                 new Tuple<string, string>( "PIR1", "最小二乘曲线拟合" ),
@@ -206,8 +206,8 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "WITY", "全区间积分的维梯方法" ),
                 new Tuple<string, string>( "RKT1", "全区间积分的定步长龙格-库塔方法" ),
                 new Tuple<string, string>( "RKT2", "积分一步的变步长龙格-库塔方法" ),
-                new Tuple<string, string>( "GIL", "积分一步的变步长基尔方法" )})/*,
-                new Tuple<string, string>( "MRSN", "全区间积分的变步长默森方法" ),
+                new Tuple<string, string>( "GIL", "积分一步的变步长基尔方法" ),
+                new Tuple<string, string>( "MRSN", "全区间积分的变步长默森方法" )})/*,//示例结果不一致
                 new Tuple<string, string>( "PBS", "积分一步的连分式法" ),
                 new Tuple<string, string>( "GJFQ", "全区间积分的双边法" ),
                 new Tuple<string, string>( "ADMS", "全区间积分的阿当姆斯预报校正法" ),

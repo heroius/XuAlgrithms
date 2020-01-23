@@ -207,8 +207,8 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "RKT1", "全区间积分的定步长龙格-库塔方法" ),
                 new Tuple<string, string>( "RKT2", "积分一步的变步长龙格-库塔方法" ),
                 new Tuple<string, string>( "GIL", "积分一步的变步长基尔方法" ),
-                new Tuple<string, string>( "MRSN", "全区间积分的变步长默森方法" )})/*,//示例结果不一致
-                new Tuple<string, string>( "PBS", "积分一步的连分式法" ),
+                new Tuple<string, string>( "MRSN", "全区间积分的变步长默森方法" ),
+                new Tuple<string, string>( "PBS", "积分一步的连分式法" )})/*,
                 new Tuple<string, string>( "GJFQ", "全区间积分的双边法" ),
                 new Tuple<string, string>( "ADMS", "全区间积分的阿当姆斯预报校正法" ),
                 new Tuple<string, string>( "HAMG", "全区间积分的哈明方法" ),

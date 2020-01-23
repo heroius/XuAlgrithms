@@ -89,6 +89,7 @@
     <Compile Include="NonlinearEquations\DHRT.cs" />
     <Compile Include="NonlinearEquations\NEWT.cs" />
     <Compile Include="ODEs\GIL.cs" />
+    <Compile Include="ODEs\PBS.cs" />
     <Compile Include="ODEs\MRSN.cs" />
     <Compile Include="ODEs\ELR1.cs" />
     <Compile Include="SampleItem.cs" />

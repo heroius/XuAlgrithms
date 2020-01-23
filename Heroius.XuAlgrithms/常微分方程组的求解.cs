@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Heroius.XuAlgrithms
 {
+    /// <summary>
+    /// 常微分方程组求解
+    /// </summary>
     public static class ODEs
     {
         /// <summary>
@@ -268,7 +271,7 @@ namespace Heroius.XuAlgrithms
         /// <param name="t">对微分方程进行积分的起始点t0</param>
         /// <param name="h">积分的步长</param>
         /// <param name="y">存放 n 个未知函数在起始点 t 处的函数值 Yj(t) (j=0,1,...,n—1)
-        /// <para>返回t+h点处的n个未知函数值Yj(t+h) (j=0,1,...,n—1)</param>
+        /// <para>返回t+h点处的n个未知函数值Yj(t+h) (j=0,1,...,n—1)</para></param>
         /// <param name="n">微分方程组中方程个数，也是未知函数的个数</param>
         /// <param name="eps">积分的精度要求</param>
         /// <paramref name="q">在主函数第一次调用本函数时，应赋值以0, 
@@ -420,14 +423,137 @@ namespace Heroius.XuAlgrithms
                         if (qq > p) p = qq;
                     }
                     hh = hh / 2.0;
-                    nn++;
+                    nn = nn + nn;
                 }
                 for (j = 0; j < n; j++) zz[j * k + i] = y[j];
             }
             z = Utility.C.Convert(zz, n, k);
         }
-        //todo: MRSN 示例计算结果与书中差距较大
 
+        /// <summary>
+        /// 用连分式法对一阶微分方程组积分一步。
+        /// </summary>
+        /// <param name="t">对微分方程进行积分的起始点t0</param>
+        /// <param name="h">积分的步长</param>
+        /// <param name="n">微分方程组中方程个数，也是未知函数的个数</param>
+        /// <param name="y">存放 n 个未知函数在起始点 t 处的函数值 Yj(t) (j=0,1,...,n—1)
+        /// <para>返回t+h点处的n个未知函数值Yj(t+h) (j=0,1,...,n—1)</para></param>
+        /// <param name="eps">积分的精度要求</param>
+        /// <param name="func">指向计算微分方程组中各方程右端函数值的函数名
+        /// <para>第1参数：积分起点</para>
+        /// <para>第2参数：未知函数在起始点处的函数值</para>
+        /// <para>第3参数：方程数</para>
+        /// <para>返回值：右端函数值</para></param>
+        public static void PBS(double t, double h, int n, ref double[] y, double eps, Func<double, double[], int, double[]> func)
+        {
+            int k = 1, m, nn = 1, it = 1;
+            double x = t, hh = h, dd, q, p;
+            double[]
+                g = new double[10],
+                b = new double[10 * n],
+                d = new double[n],
+                u = new double[n],
+                v = new double[n],
+                w = new double[n],
+                e = new double[n];
 
+            for (int j = 0; j < n; j++)
+            {
+                v[j] = y[j];
+            }
+            g[0] = hh;
+            PBS_RKT(x, hh, n, ref y, w, ref d, e, func);
+            for (int i = 0; i < n; i++)
+            {
+                b[i] = y[i]; u[i] = y[i];
+            }
+            while (it == 1)
+            {
+                nn += nn;
+                hh /= 2;
+                it = 0;
+                g[k] = hh;
+                for (int i = 0; i < n; i++)
+                {
+                    y[i] = v[i];
+                }
+                t = x;
+                for (int i = 0; i < nn; i++)
+                {
+                    PBS_RKT(t, hh, n, ref y, w, ref d, e, func);
+                    t += hh;
+                }
+                for (int i = 0; i < n; i++)
+                {
+                    dd = y[i];
+                    m = 0;
+                    for (int j = 0; j < k; j++)
+                    {
+                        if (m == 0)
+                        {
+                            q = dd - b[j * n + i];
+                            if (q == 0)
+                            {
+                                m = 1;
+                            }
+                            else
+                            {
+                                dd = (g[k] - g[j]) / q;
+                            }
+                        }
+                    }
+                    b[k * n + i] = dd;
+                    if (m != 0) b[k * n + i] = 1e35;
+                }
+                for (int j = 0; j < n; j++)
+                {
+                    dd = 0;
+                    for (int i = k-1; i>=0; i--)
+                    {
+                        dd = -g[i] / b[(i + 1) * n + j] + dd;
+                    }
+                    y[j] = dd + b[j];
+                }
+                p = 0;
+                for (int j = 0; j < n; j++)
+                {
+                    q = Math.Abs(y[j] - u[j]);
+                    if (q > p) p = q;
+                }
+                if ((p>=eps)&&(k<7))
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        u[j] = y[j];
+                    }
+                    k++;
+                    it = 1;
+                }
+            }
+        }
+
+        static void PBS_RKT(double t, double h, int n, ref double[] y, double[] b, ref double[] d, double[] e, Func<double, double[], int, double[]> func)
+        {
+            int i, k;
+            double[] a = new double[] { h / 2, h / 2, h, h };
+            double tt;
+            for (i = 0; i < n; i++)
+            {
+                b[i] = y[i];
+                e[i] = y[i];
+            }
+            for (k = 0; k < 3; k++)
+            {
+                for (i = 0; i < n; i++)
+                {
+                    y[i] = e[i] + a[k] * d[i];
+                    b[i] = b[i] + a[k + 1] * d[i] / 3;
+                }
+                tt = t + a[k];
+                d = func(tt, y, n);
+            }
+            for (i = 0; i < n; i++)
+                y[i] = b[i] + h * d[i] / 6;
+        }
     }
 }

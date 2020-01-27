@@ -397,11 +397,13 @@ namespace Heroius.XuAlgrithms
         /// 用追赶法求解n 阶三对角线方程组AX=D 。
         /// </summary>
         /// <param name="b">以行为主存放三对角矩阵中3 条对角线上的元素</param>
-        /// <param name="d">存放方程组右端的常数向社，返回方程组的解向拭</param>
-        public static void TRDE(double[] b, double[] d)
+        /// <param name="m">三对角矩阵3 条对角线上的元素个数, 其值应为m =3 n- 2</param>
+        /// <param name="n">方程组的阶数</param>
+        /// <param name="d">存放方程组右端的常数向量，返回方程组的解向拭</param>
+        public static void TRDE(double[] b, int n, int m, ref double[] d)
         {
-            int m = b.Length;
-            int n = d.Length;
+            //int m = b.Length;
+            //int n = d.Length;
             if (m != 3 * n - 2)
             {
                 throw new Exception("三对角矩阵3 条对角线上的元素个数应为m = 3 n - 2");
@@ -594,24 +596,28 @@ namespace Heroius.XuAlgrithms
         /// <summary>
         /// 用乔里斯基(Cholesky) 分解法（即平方根法）求解系数矩阵为对称正定、且右端具有m 组常数向量的n 阶线性代数方程组AX=D 。其中A 为n 阶对称正定矩阵。
         /// </summary>
-        /// <param name="a">存放对称正定的系数矩阵，返回时其上三角部分存放分解后的U 矩阵</param>
-        /// <param name="d">存放方程组右端m 组常数向量，返回方程组的m 组解向量</param>
-        public static void CHLK(double[,] a, double[,] d)
+        /// <param name="a">a[n,n]: 存放对称正定的系数矩阵，返回时其上三角部分存放分解后的U 矩阵</param>
+        /// <param name="n">方程组的阶数</param>
+        /// <param name="m">方程组右端常数向量的组数</param>
+        /// <param name="d">d[n,m]: 存放方程组右端m 组常数向量，返回方程组的m 组解向量</param>
+        /// <returns>函数返回标志值。若返回的标志值小千0, 则表示程序工作失败； 若返回的标志值大于0, 则表示正常返回</returns>
+        public static int CHLK(ref double[,] a, int n, int m, ref double[,] d)
         {
-            int n = a.GetLength(0);
-            if (a.GetLength(1) != n)
-            {
-                throw new Exception("a 非方阵");
-            }
-            int m = d.GetLength(1);
-            if (d.GetLength(0) != n)
-            {
-                throw new Exception("d 不匹配");
-            }
+            //int n = a.GetLength(0);
+            //if (a.GetLength(1) != n)
+            //{
+            //    throw new Exception("a 非方阵");
+            //}
+            //int m = d.GetLength(1);
+            //if (d.GetLength(0) != n)
+            //{
+            //    throw new Exception("d 不匹配");
+            //}
             int i, j, k;
             if ((a[0, 0] + 1.0 == 1.0) || (a[0, 0] < 0.0))
             {
-                throw new Exception("程序工作失败！无解.");
+                //throw new Exception("程序工作失败！无解.");
+                return -2;
             }
             a[0, 0] = Math.Sqrt(a[0, 0]);
             for (j = 1; j <= n - 1; j++) a[0, j] = a[0, j] / a[0, 0];
@@ -623,7 +629,8 @@ namespace Heroius.XuAlgrithms
                 }
                 if ((a[i, i] + 1.0 == 1.0) || (a[i, i] < 0.0))
                 {
-                    throw new Exception("程序工作失败！无解.");
+                    //throw new Exception("程序工作失败！无解.");
+                    return -2;
                 }
                 a[i, i] = Math.Sqrt(a[i, i]);
                 if (i != (n - 1))
@@ -658,6 +665,7 @@ namespace Heroius.XuAlgrithms
                     d[k - 1, j] = d[k - 1, j] / a[k - 1, k - 1];
                 }
             }
+            return 2;
         }
 
         /// <summary>

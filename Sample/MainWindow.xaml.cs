@@ -43,8 +43,9 @@ namespace Sample
             {
                 TbResult.Text = item.Execute();
             }
-            catch (Exception ex) { 
-                TbResult.Text = ex.Message; }
+            catch (Exception ex) {
+                TbResult.Text = $"{ex.Message}\r\n{ex.StackTrace}"; 
+            }
         }
     }
 

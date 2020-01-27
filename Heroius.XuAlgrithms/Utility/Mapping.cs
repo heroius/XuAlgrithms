@@ -76,11 +76,20 @@ namespace Heroius.XuAlgrithms.Utility
             return Type.GetType($"Heroius.XuAlgrithms.{keyparts[0]}").GetMethod(keyparts[1]);
         }
 
+        /// <summary>
+        /// 根据给定的算法分节名获取相应的描述
+        /// </summary>
+        /// <param name="SectionName">分节名</param>
+        /// <returns>该节的描述</returns>
         public static string GetSectionDescription(string SectionName)
         {
             return descriptions.First(t => t.Item1 == SectionName).Item2;
         }
-
+        /// <summary>
+        /// 根据给定的算法分节名获取相应的所有包含的算法名
+        /// </summary>
+        /// <param name="SectionName">分节名</param>
+        /// <returns>该节所有包含的算法名</returns>
         public static IEnumerable<string> GetSectionAlgrithmNames(string SectionName)
         {
             var sect = descriptions.First(tlv1 => tlv1.Item1 == SectionName);
@@ -208,7 +217,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "RKT2", "积分一步的变步长龙格-库塔方法" ),
                 new Tuple<string, string>( "GIL", "积分一步的变步长基尔方法" ),
                 new Tuple<string, string>( "MRSN", "全区间积分的变步长默森方法" ),
-                new Tuple<string, string>( "PBS", "积分一步的连分式法" )})/*,
+                new Tuple<string, string>( "PBS", "积分一步的连分式法" ),
                 new Tuple<string, string>( "GJFQ", "全区间积分的双边法" ),
                 new Tuple<string, string>( "ADMS", "全区间积分的阿当姆斯预报校正法" ),
                 new Tuple<string, string>( "HAMG", "全区间积分的哈明方法" ),
@@ -221,7 +230,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "SQT2", "多元线性回归分析" ),
                 new Tuple<string, string>( "SQT3", "逐步回归分析" ),
                 new Tuple<string, string>( "LOG1", "半对数数据相关" ),
-                new Tuple<string, string>( "LOG2", "对数数据相关" )}),
+                new Tuple<string, string>( "LOG2", "对数数据相关" )})/*}),
             new Tuple<string, string, Tuple<string, string>[]>("Extremum", "极值问题的求解", new Tuple<string, string>[] {
                 new Tuple<string, string>( "MAX1", "一维极值连分式法" ),
                 new Tuple<string, string>( "MAXN", "n维极值连分式法" ),

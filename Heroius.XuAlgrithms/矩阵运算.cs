@@ -13,25 +13,27 @@ namespace Heroius.XuAlgrithms
         /// <summary>
         /// 求m×n阶矩阵A与n×k阶矩阵B的乘积矩阵C=AB.
         /// </summary>
-        /// <param name="A">存放矩阵A的元素</param>
-        /// <param name="B">存放矩阵B的元素</param>
-        /// <returns>m×k阶乘积矩阵C</returns>
-        public static double[,] TRMUL(double[,] A, double[,] B)
+        /// <param name="a">a[m,n] 存放矩阵A的元素</param>
+        /// <param name="b">b[n,k]存放矩阵B的元素</param>
+        /// <param name="m">矩阵A 与乘积矩阵C 的行数</param>
+        /// <param name="n">矩阵A 的列数，矩阵B 的行数</param>
+        /// <param name="k">矩阵B 与乘积矩阵C 的列数</param>
+        /// <param name="c">c[m,k]: 返回m×k阶乘积矩阵C</param>
+        public static void TRMUL(double[,] a, double[,] b, int m, int n, int k, out double[,] c)
         {
-            int m = A.GetLength(0), n = A.GetLength(1);
-            int k = B.GetLength(1);
-            if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("矩阵无法相乘");
-            var C = new double[m, k];
+            //int m = A.GetLength(0), n = A.GetLength(1);
+            //int k = B.GetLength(1);
+            //if (A.GetLength(1) != B.GetLength(0))
+            //    throw new Exception("矩阵无法相乘");
+            c = new double[m, k];
             int i, j, t;
             for (i = 0; i < m; i++)
                 for (j = 0; j < k; j++)
                 {
-                    C[i, j] = 0.0;
+                    c[i, j] = 0.0;
                     for (t = 0; t < n; t++)
-                        C[i, j] = C[i, j] + A[i, t] * B[t, j];
+                        c[i, j] = c[i, j] + a[i, t] * b[t, j];
                 }
-            return C;
         }
 
         /// <summary>
@@ -84,14 +86,18 @@ namespace Heroius.XuAlgrithms
         /// <summary>
         /// 用全选主元高斯-约当(Gauss-Jordan)消去法求n阶实矩阵A的逆矩阵
         /// </summary>
-        /// <param name="a">存放矩阵A，返回时存放其逆矩阵</param>
-        public static void RINV(double[,] a)
+        /// <param name="a">a[n,n]: 存放矩阵A，返回时存放其逆矩阵</param>
+        /// <param name="n">矩阵阶数</param>
+        /// <returns>返回整型标志。
+        /// 当返回标志值为0时，表示A奇异；
+        /// 否则，表示正常返回</returns>
+        public static int RINV(ref double[,] a, int n)
         {
-            int n = a.GetLength(0);
-            if (a.GetLength(1) != n)
-            {
-                throw new Exception("输入非n阶矩阵");
-            }
+            //int n = a.GetLength(0);
+            //if (a.GetLength(1) != n)
+            //{
+            //    throw new Exception("输入非n阶矩阵");
+            //}
             int[] s, js;
             int i, j, k;
             double d, p;
@@ -108,7 +114,8 @@ namespace Heroius.XuAlgrithms
                     }
                 if (d + 1.0 == 1.0)
                 {
-                    throw new Exception("A为奇异矩阵！没有逆矩阵. ");
+                    //throw new Exception("A为奇异矩阵！没有逆矩阵. ");
+                    return 0;
                 }
                 if (s[k] != k)
                     for (j = 0; j <= n - 1; j++)
@@ -143,6 +150,7 @@ namespace Heroius.XuAlgrithms
                         p = a[i, k]; a[i, k] = a[i, s[k]]; a[i, s[k]] = p;
                     }
             }
+            return 1;
         }
 
         /// <summary>

@@ -1076,15 +1076,7 @@ namespace Heroius.XuAlgrithms
                             for (j = 0; j <= n - 1; j++) p[i,j] = p[i,j] * r;
                         for (i = 0; i <= n - 1; i++) p[i,i] = 1.0 + p[i,i];
                         iw = -1;
-                        try
-                        {
-                            Matrix.RINV(p);
-                            jjs = 1;
-                        }
-                        catch
-                        {
-                            jjs = 0;
-                        }
+                        jjs = Matrix.RINV(ref p, n);
                         j1 = jjs;
                     }
                     if (jjs != 0)

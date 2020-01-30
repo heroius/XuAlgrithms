@@ -411,5 +411,107 @@ namespace Heroius.XuAlgrithms
 
             r = Utility.C.Convert(temp_r, n + 1, n + 1);
         }
+
+        /// <summary>
+        /// 对于给定的n个数据点(Xi,Yi)(i=0,1,...,n-1)，用 y=bt^ax, t>0 作拟合。
+        /// </summary>
+        /// <param name="n">数据点数</param>
+        /// <param name="x">x[n]: 存放n个数据点</param>
+        /// <param name="y">y[n]: 存放n个数据点，要求所有的y>0</param>
+        /// <param name="t">指数函数的底，要求t>0</param>
+        /// <param name="a">a[7]: 返回拟合函数的参数以及各种统计量。
+        /// <para>a(0): 拟合函数y=bt^ax中的 b</para>
+        /// <para>a(1): 拟合函数y=bt^ax中的 a</para>
+        /// <para>a(2): 偏差平方和q，即q=Σ(Yi-bt^aXi)^2</para>
+        /// <para>a(3): 平均标准偏差s，即s=√(q/n)</para>
+        /// <para>a(4): 最大偏差Umax，即Umax=max|Yi-bt^aXi|</para>
+        /// <para>a(5): 最小偏差Umin，即Umin=min|Yi-bt^aXi|</para>
+        /// <para>a(6): 偏差平均值u，即u=(1/n)Σ|Yi-bt^aXi|</para>
+        /// </param>
+        public static void LOG1(int n, double[] x, double[] y, double t, out double[] a)
+        {
+            double xx=0, yy=0, dx=0, dxy=0;
+            a = new double[7];
+            for (int i = 0; i < n; i++)
+            {
+                xx += x[i] / n;
+                yy += Math.Log(y[i]) / Math.Log(t) / n;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                a[2] = x[i] - xx;
+                dx += a[2] * a[2];
+                dxy += a[2] * (Math.Log(y[i]) / Math.Log(t) - yy);
+            }
+            a[1] = dxy / dx;
+            a[0] = yy - a[1] * xx;
+            a[0] = a[0] * Math.Log(t);
+            a[0] = Math.Exp(a[0]);
+            a[2] = 0;
+            a[6] = 0;
+            a[4] = 0;
+            a[5] = 1e30;
+            for (int i = 0; i < n; i++)
+            {
+                a[3] = a[1] * x[i] * Math.Log(t);
+                a[3] = a[0] * Math.Exp(a[3]);
+                a[2] = a[2] + (y[i] - a[3]) * (y[i] - a[3]);
+                dx = Math.Abs(y[i] - a[3]);
+                if (dx > a[4]) a[4] = dx;
+                if (dx < a[5]) a[5] = dx;
+                a[6] += dx / n;
+            }
+            a[3] = Math.Sqrt(a[2] / n);
+        }
+
+        /// <summary>
+        /// 对于给定的n个数据点(Xk,Yk)(k=0,1,...,n-1)，用 y=bx^a, 作拟合。
+        /// </summary>
+        /// <param name="n">数据点数</param>
+        /// <param name="x">x[n]: 存放n个数据点</param>
+        /// <param name="y">y[n]: 存放n个数据点，要求所有的y>0</param>
+        /// <param name="a">a[7]: 返回拟合函数的参数以及各种统计量。
+        /// <para>a(0): 拟合函数y=bt^ax中的 b</para>
+        /// <para>a(1): 拟合函数y=bt^ax中的 a</para>
+        /// <para>a(2): 偏差平方和q，即q=Σ(Yi-bt^aXi)^2</para>
+        /// <para>a(3): 平均标准偏差s，即s=√(q/n)</para>
+        /// <para>a(4): 最大偏差Umax，即Umax=max|Yi-bt^aXi|</para>
+        /// <para>a(5): 最小偏差Umin，即Umin=min|Yi-bt^aXi|</para>
+        /// <para>a(6): 偏差平均值u，即u=(1/n)Σ|Yi-bt^aXi|</para>
+        /// </param>
+        public static void LOG2(int n, double[] x, double[] y, out double[] a)
+        {
+            double xx=0, yy=0, dx=0, dxy=0;
+            a = new double[7];
+            for (int i = 0; i < n; i++)
+            {
+                xx += Math.Log(x[i]) / n;
+                yy += Math.Log(y[i]) / n;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                a[2] = Math.Log(x[i]) - xx;
+                dx += a[2] * a[2];
+                dxy += a[2] * (Math.Log(y[i]) - yy);
+            }
+            a[1] = dxy / dx;
+            a[0] = yy - a[1] * xx;
+            a[0] = Math.Exp(a[0]);
+            a[2] = 0;
+            a[6] = 0;
+            a[4] = 0;
+            a[5] = 1e30;
+            for (int i = 0; i < n; i++)
+            {
+                a[3] = a[1] * Math.Log(x[i]);
+                a[3] = a[0] * Math.Exp(a[3]);
+                a[2] += (y[i] - a[3]) * (y[i] - a[3]);
+                dx = Math.Abs(y[i] - a[3]);
+                if (dx > a[4]) a[4] = dx;
+                if (dx < a[5]) a[5] = dx;
+                a[6] += dx / n;
+            }
+            a[3] = Math.Sqrt(a[2] / n);
+        }
     }
 }

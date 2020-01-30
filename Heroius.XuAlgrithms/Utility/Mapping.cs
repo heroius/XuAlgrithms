@@ -101,7 +101,7 @@ namespace Heroius.XuAlgrithms.Utility
         /// </summary>
         internal static readonly Tuple<string, string, Tuple<string, string>[]>[] descriptions = new Tuple<string, string, Tuple<string, string>[]>[] {
             new Tuple<string, string, Tuple<string, string>[]>("Matrix", "矩阵运算", new Tuple<string, string>[] {
-                new Tuple<string, string>("TRMUL", "实矩阵相乘"),
+                new Tuple<string, string>( "TRMUL", "实矩阵相乘"),
                 new Tuple<string, string>( "TCMUL", "复矩阵相乘" ),
                 new Tuple<string, string>( "RINV", "一般实矩阵求逆" ),
                 new Tuple<string, string>( "CINV", "一般复矩阵求逆" ),
@@ -230,13 +230,13 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "SQT2", "多元线性回归分析" ),
                 new Tuple<string, string>( "SQT3", "逐步回归分析" ),
                 new Tuple<string, string>( "LOG1", "半对数数据相关" ),
-                new Tuple<string, string>( "LOG2", "对数数据相关" )})/*}),
+                new Tuple<string, string>( "LOG2", "对数数据相关" )}),
             new Tuple<string, string, Tuple<string, string>[]>("Extremum", "极值问题的求解", new Tuple<string, string>[] {
                 new Tuple<string, string>( "MAX1", "一维极值连分式法" ),
                 new Tuple<string, string>( "MAXN", "n维极值连分式法" ),
                 new Tuple<string, string>( "LPLQ", "不等式约束线性规划问题" ),
                 new Tuple<string, string>( "JSIM", "求n维极值的单形调优法" ),
-                new Tuple<string, string>( "CPLX", "求约束条件下n维极值的复形调优法" )}),
+                new Tuple<string, string>( "CPLX", "求约束条件下n维极值的复形调优法" )})/*}),
             new Tuple<string, string, Tuple<string, string>[]>("Transformation", "数学变换与滤波", new Tuple<string, string>[] {
                 new Tuple<string, string>( "FOUR", "傅里叶级数逼近" ),
                 new Tuple<string, string>( "KFFT", "快速傅里叶变换" ),

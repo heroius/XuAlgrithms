@@ -19,7 +19,7 @@
                 {0,3,-5 },
                 {9,8,-6 }
             };
-            var c = Heroius.XuAlgrithms.Matrix.TRMUL(a, b);
+            Heroius.XuAlgrithms.Matrix.TRMUL(a, b, 4, 5, 3, out double[,] c);
             return Utility.MakeMatrixString(c);
         }
     }

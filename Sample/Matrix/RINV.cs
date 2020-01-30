@@ -18,7 +18,7 @@ namespace Sample.Matrix
                 { 0.1582, 1.1675, 0.1768, 0.1871 },
                 { 0.1968, 0.2071, 1.2168, 0.2277 }
             };
-            Heroius.XuAlgrithms.Matrix.RINV(a);
+            Heroius.XuAlgrithms.Matrix.RINV(ref a, 4);
             return Utility.MakeMatrixString(a);
         }
     }

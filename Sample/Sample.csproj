@@ -163,6 +163,7 @@
   <ItemGroup>
     <Folder Include="Extremum\" />
     <Folder Include="NumericalIntegration\" />
+    <Folder Include="Transformation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

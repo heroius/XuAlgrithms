@@ -25,7 +25,7 @@ namespace Heroius.XuAlgrithms
         /// </param>
         public static void MAX1(ref double[] x, double eps, int k, out int[] js, Func<double, double[]> func)
         {
-            double xx, h1, h2=0, dx;
+            double xx, h1, h2 = 0, dx;
             double[]
                 y = new double[10],
                 b = new double[10],
@@ -33,15 +33,15 @@ namespace Heroius.XuAlgrithms
             js = new int[2];
             js[0] = 0;
             int i, j, jt = 1, m;
-            while (jt==1)
+            while (jt == 1)
             {
                 j = 0;
-                while (j<=7)
+                while (j <= 7)
                 {
                     if (j <= 2) xx = x[0] + 0.01 * j;
                     else xx = h2;
                     z = func(xx);
-                    if (Math.Abs(z[1])<eps)
+                    if (Math.Abs(z[1]) < eps)
                     {
                         jt = 0;
                         j = 10;
@@ -50,7 +50,7 @@ namespace Heroius.XuAlgrithms
                     {
                         h1 = z[1];
                         h2 = xx;
-                        if(j==0)
+                        if (j == 0)
                         {
                             y[0] = h1;
                             b[0] = h2;
@@ -60,7 +60,7 @@ namespace Heroius.XuAlgrithms
                             y[j] = h1;
                             m = 0;
                             i = 0;
-                            while ((m==0)&&(j<=j-1))
+                            while ((m == 0) && (j <= j - 1))
                             {
                                 if (h2 == b[i]) m = 1;
                                 else h2 = (h1 - y[i]) / (h2 - b[i]);
@@ -112,7 +112,7 @@ namespace Heroius.XuAlgrithms
         public static void MAXN(ref double[] x, int n, double eps, int k, out double[] js, Func<double[], int, int, double> func)
         {
             int i, j, m, l, jt, il;
-            double p, zz=0, t, h1, h2, f, dx;
+            double p, zz = 0, t, h1, h2, f, dx;
             double[] y = new double[10], b = new double[10];
             js = new double[2];
             js[0] = 0;
@@ -122,7 +122,7 @@ namespace Heroius.XuAlgrithms
                 t = 0.0; js[0] = js[0] + 1;
                 for (i = 1; i <= n; i++)
                 {
-                    f = func(x,n,i);
+                    f = func(x, n, i);
                     t = t + Math.Abs(f);
                 }
                 if (t < eps) jt = 0;
@@ -227,8 +227,8 @@ namespace Heroius.XuAlgrithms
             while (true)
             {
                 for (i = 0; i <= m - 1; i++)
-                    for (j = 0; j <= m - 1; j++) 
-                        p[i,j] = a[i,jjs[j]];
+                    for (j = 0; j <= m - 1; j++)
+                        p[i, j] = a[i, jjs[j]];
                 if (Matrix.RINV(ref p, m) == 0)
                 {
                     x[n] = s; return 1;
@@ -238,14 +238,14 @@ namespace Heroius.XuAlgrithms
                 for (i = 0; i <= m - 1; i++)
                 {
                     s = 0.0;
-                    for (j = 0; j <= m - 1; j++) s = s + p[i,j] * b[j];
+                    for (j = 0; j <= m - 1; j++) s = s + p[i, j] * b[j];
                     x[jjs[i]] = s;
                 }
                 k = -1; dd = 1.0e-35;
                 for (j = 0; j <= mn - 1; j++)
                 {
                     z = 0.0;
-                    for (i = 0; i <= m - 1; i++) z = z + c[jjs[i]] * d[i,j];
+                    for (i = 0; i <= m - 1; i++) z = z + c[jjs[i]] * d[i, j];
                     z = z - c[j];
                     if (z > dd) { dd = z; k = j; }
                 }
@@ -259,9 +259,9 @@ namespace Heroius.XuAlgrithms
                 j = -1;
                 dd = 1.0e+20;
                 for (i = 0; i <= m - 1; i++)
-                    if (d[i,k] >= 1.0e-20)
+                    if (d[i, k] >= 1.0e-20)
                     {
-                        y = x[jjs[i]] / d[i,k];
+                        y = x[jjs[i]] / d[i, k];
                         if (y < dd) { dd = y; j = i; }
                     }
                 if (j == -1)
@@ -428,33 +428,37 @@ namespace Heroius.XuAlgrithms
         /// <param name="m">函数约束条件的个数</param>
         /// <param name="a">a[n]: 依次存放常量约束条件中的变量Xi(i=0,1,...,n-1)的下界</param>
         /// <param name="b">b[n]: 依次存放常量约束条件中的变量Xi(i=0,1,...,n-1)的上界</param>
-        /// <param name="alpha"></param>
-        /// <param name="eps"></param>
-        /// <param name="x"></param>
-        /// <param name="xx"></param>
-        /// <param name="k"></param>
-        /// <param name="s"></param>
-        /// <param name="f"></param>
-        /// <returns></returns>
+        /// <param name="alpha">反射系数α。一般取值为1.3左右</param>
+        /// <param name="eps">控制精度要求</param>
+        /// <param name="x">x[n+1]: 前n个分量存放初始复形的第一个顶点坐标值（要求满足所有的约束条件），
+        /// 返回极小值点各坐标值；最后一个分量返回极小值</param>
+        /// <param name="xx">xx[n+1][2n]: 前n行返回最后复形的2n个顶点坐标（一列为一个顶点）；
+        /// 最后一行返回最后复形的2n个顶点上的目标函数值</param>
+        /// <param name="k">允许的最大迭代次数</param>
+        /// <param name="s">指向计算函数约束条件中的下限、上限以及条件值的函数</param>
+        /// <param name="f">指向计算目标函数值的函数</param>
+        /// <returns>返回实际迭代次数。若实际迭代次数等于允许的最大迭代次数k，则有可能未达到精度要求，返回的极值点只作为参考</returns>
         public static int CPLX(int n, int m, double[] a, double[] b, double alpha, double eps, ref double[] x, out double[,] xx, int k, CPLX_S s, CPLX_F f)
         {
             int r, g, i, j, it, kt, jt, kk;
-            double fj, fr, fg, z, rr,*c,*d,*w,*xt,*xf;
-            c = malloc(m * sizeof(double));
-            d = malloc(m * sizeof(double));
-            w = malloc(m * sizeof(double));
-            xt = malloc(n * sizeof(double));
-            xf = malloc(n * sizeof(double));
+            double fj, fr, fg, z = 0, rr;
+            double[]
+                c = new double[m],
+                d = new double[m],
+                w = new double[m],
+                xt = new double[n],
+                xf = new double[n];
+            double[] xxx = new double[(n + 1) * 2 * n];
             rr = 0.0;
             for (i = 0; i <= n - 1; i++)
-                xx[i * n * 2] = x[i];
-            xx[n * n * 2] = (*f)(x, n);
+                xxx[i * n * 2] = x[i];
+            xxx[n * n * 2] = f(x, n);
             for (j = 1; j <= 2 * n - 1; j++)
             {
                 for (i = 0; i <= n - 1; i++)
                 {
-                    xx[i * n * 2 + j] = a[i] + (b[i] - a[i]) * rn(&rr);
-                    x[i] = xx[i * n * 2 + j];
+                    xxx[i * n * 2 + j] = a[i] + (b[i] - a[i]) * CPLX_RN(ref rr);
+                    x[i] = xxx[i * n * 2 + j];
                 }
                 it = 1;
                 while (it == 1)
@@ -467,7 +471,7 @@ namespace Heroius.XuAlgrithms
                     }
                     if (g == 0)
                     {
-                        s(n, m, x, c, d, w);
+                        s(n, m, x, out c, out d, out w);
                         r = 0;
                         while ((r < m) && (g == 0))
                         {
@@ -481,48 +485,48 @@ namespace Heroius.XuAlgrithms
                         {
                             z = 0.0;
                             for (g = 0; g <= j - 1; g++)
-                                z = z + xx[r * n * 2 + g] / (1.0 * j);
-                            xx[r * n * 2 + j] = (xx[r * n * 2 + j] + z) / 2.0;
-                            x[r] = xx[r * n * 2 + j];
+                                z = z + xxx[r * n * 2 + g] / (1.0 * j);
+                            xxx[r * n * 2 + j] = (xxx[r * n * 2 + j] + z) / 2.0;
+                            x[r] = xxx[r * n * 2 + j];
                         }
                         it = 1;
                     }
-                    else xx[n * n * 2 + j] = (*f)(x, n);
+                    else xxx[n * n * 2 + j] = f(x, n);
                 }
             }
             kk = 1; it = 1;
             while (it == 1)
             {
                 it = 0;
-                fr = xx[n * n * 2]; r = 0;
+                fr = xxx[n * n * 2]; r = 0;
                 for (i = 1; i <= 2 * n - 1; i++)
-                    if (xx[n * n * 2 + i] > fr)
-                    { r = i; fr = xx[n * n * 2 + i]; }
-                g = 0; j = 0; fg = xx[n * n * 2];
+                    if (xxx[n * n * 2 + i] > fr)
+                    { r = i; fr = xxx[n * n * 2 + i]; }
+                g = 0; j = 0; fg = xxx[n * n * 2];
                 if (r == 0)
-                { g = 1; j = 1; fg = xx[n * n * 2 + 1]; }
+                { g = 1; j = 1; fg = xxx[n * n * 2 + 1]; }
                 for (i = j + 1; i <= 2 * n - 1; i++)
                     if (i != r)
-                        if (xx[n * n * 2 + i] > fg)
-                        { g = i; fg = xx[n * n * 2 + i]; }
+                        if (xxx[n * n * 2 + i] > fg)
+                        { g = i; fg = xxx[n * n * 2 + i]; }
                 for (i = 0; i <= n - 1; i++)
                 {
                     xf[i] = 0.0;
                     for (j = 0; j <= 2 * n - 1; j++)
                         if (j != r)
-                            xf[i] = xf[i] + xx[i * n * 2 + j] / (2.0 * n - 1.0);
-                    xt[i] = (1.0 + alpha) * xf[i] - alpha * xx[i * n * 2 + r];
+                            xf[i] = xf[i] + xxx[i * n * 2 + j] / (2.0 * n - 1.0);
+                    xt[i] = (1.0 + alpha) * xf[i] - alpha * xxx[i * n * 2 + r];
                 }
                 jt = 1;
                 while (jt == 1)
                 {
                     jt = 0;
-                    z = (*f)(xt, n);
+                    z = f(xt, n);
                     while (z > fg)
                     {
                         for (i = 0; i <= n - 1; i++)
                             xt[i] = (xt[i] + xf[i]) / 2.0;
-                        z = (*f)(xt, n);
+                        z = f(xt, n);
                     }
                     j = 0;
                     for (i = 0; i <= n - 1; i++)
@@ -535,7 +539,7 @@ namespace Heroius.XuAlgrithms
                     if (j != 0) jt = 1;
                     else
                     {
-                        (*s)(n, m, xt, c, d, w);
+                        s(n, m, xt, out c, out d, out w);
                         j = 0; kt = 1;
                         while ((kt == 1) && (j < m))
                         {
@@ -551,12 +555,12 @@ namespace Heroius.XuAlgrithms
                     }
                 }
                 for (i = 0; i <= n - 1; i++)
-                    xx[i * n * 2 + r] = xt[i];
-                xx[n * n * 2 + r] = z;
+                    xxx[i * n * 2 + r] = xt[i];
+                xxx[n * n * 2 + r] = z;
                 fr = 0.0; fg = 0.0;
                 for (j = 0; j <= 2 * n - 1; j++)
                 {
-                    fj = xx[n * n * 2 + j];
+                    fj = xxx[n * n * 2 + j];
                     fr = fr + fj / (2.0 * n);
                     fg = fg + fj * fj;
                 }
@@ -571,28 +575,42 @@ namespace Heroius.XuAlgrithms
             {
                 x[i] = 0.0;
                 for (j = 0; j <= 2 * n - 1; j++)
-                    x[i] = x[i] + xx[i * n * 2 + j] / (2.0 * n);
+                    x[i] = x[i] + xxx[i * n * 2 + j] / (2.0 * n);
             }
             z = f(x, n); x[n] = z;
+
+            xx = Utility.C.Convert(xxx, n + 1, 2 * n);
             return (kk);
         }
 
         /// <summary>
         /// 计算函数约束条件中的下限、上限以及条件值的函数
+        /// <para>C ≤ W ≤ D</para>
         /// </summary>
         /// <param name="n">变量个数</param>
         /// <param name="m">函数约束条件的个数</param>
-        /// <param name="x"></param>
-        /// <param name="c"></param>
-        /// <param name="d"></param>
-        /// <param name="w"></param>
-        public delegate void CPLX_S(int n, int m, double[] x, double[] c, double[] d, double[] w);
+        /// <param name="x">x[n]: 坐标值</param>
+        /// <param name="c">c[m]: 返回m个下限</param>
+        /// <param name="d">d[m]: 返回m个上限</param>
+        /// <param name="w">w[m]: 返回m个条件值</param>
+        public delegate void CPLX_S(int n, int m, double[] x, out double[] c, out double[] d, out double[] w);
         /// <summary>
         /// 计算目标函数值的函数
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <param name="x">x[n]: 坐标值</param>
+        /// <param name="n">变量个数</param>
+        /// <returns>目标函数值</returns>
         public delegate double CPLX_F(double[] x, int n);
+
+        static double CPLX_RN(ref double rr)
+        {
+            int m;
+            double y, s, u, v;
+            s = 65536.0; u = 2053.0; v = 13849.0;
+            rr = u * (rr) + v; m = (int)(rr / s);
+            rr = rr - m * s;
+            y = rr / s;
+            return (y);
+        }
     }
 }

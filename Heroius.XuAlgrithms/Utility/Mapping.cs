@@ -236,7 +236,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "MAXN", "n维极值连分式法" ),
                 new Tuple<string, string>( "LPLQ", "不等式约束线性规划问题" ),
                 new Tuple<string, string>( "JSIM", "求n维极值的单形调优法" ),
-                new Tuple<string, string>( "CPLX", "求约束条件下n维极值的复形调优法" )})/*}),
+                new Tuple<string, string>( "CPLX", "求约束条件下n维极值的复形调优法" )}),
             new Tuple<string, string, Tuple<string, string>[]>("Transformation", "数学变换与滤波", new Tuple<string, string>[] {
                 new Tuple<string, string>( "FOUR", "傅里叶级数逼近" ),
                 new Tuple<string, string>( "KFFT", "快速傅里叶变换" ),
@@ -261,7 +261,7 @@ namespace Heroius.XuAlgrithms.Utility
                 new Tuple<string, string>( "COSS", "余弦积分" ),
                 new Tuple<string, string>( "EXPP", "指数积分" ),
                 new Tuple<string, string>( "ELP1", "第一类椭圆积分" ),
-                new Tuple<string, string>( "ELP2", "第二类椭圆积分" )}) ,
+                new Tuple<string, string>( "ELP2", "第二类椭圆积分" )})/*}) ,
             new Tuple<string, string, Tuple<string, string>[]>("Sorting", "排序", new Tuple<string, string>[] {
                 new Tuple<string, string>( "IBUB", "冒泡排序" ),
                 new Tuple<string, string>( "IQCK", "快速排序" ),
